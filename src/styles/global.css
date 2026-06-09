@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+:root {
+  --bg-main: #09090b;
+  --bg-dots: #1f1f23;
+  --nav-bg: rgba(9, 9, 11, 0.7);
+  --nav-text: #a1a1aa;
+  --nav-hover: #ffffff;
+  --nav-border: rgba(24, 24, 27, 0.8);
+  --card-bg: rgba(24, 24, 27, 0.4);
+  --card-border: rgba(39, 39, 42, 0.8);
+  --inner-box: rgba(9, 9, 11, 0.4);
+  --input-bg: #09090b;
+  --input-border: #27272a;
+  --input-text: #ffffff;
+  --logo-primary: #ffffff;
+  --logo-secondary: #71717a;
+  --footer-border: rgba(39, 39, 42, 0.4);
+  
+  --text-primary: #f4f4f5;
+  --text-secondary: #a1a1aa;
+  --faq-bg: rgba(24, 24, 27, 0.2);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.light-mode {
+  --bg-main: #f4f4f5;
+  --bg-dots: #d4d4d8;
+  --nav-bg: rgba(244, 244, 245, 0.85);
+  --nav-text: #52525b;
+  --nav-hover: #09090b;
+  --nav-border: rgba(228, 228, 231, 0.8);
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --card-border: rgba(212, 212, 216, 0.8);
+  --inner-box: rgba(244, 244, 245, 0.5);
+  --input-bg: #ffffff;
+  --input-border: #d4d4d8;
+  --input-text: #09090b;
+  --logo-primary: #09090b;
+  --logo-secondary: #71717a;
+  --footer-border: rgba(228, 228, 231, 0.8);
+  
+  --text-primary: #09090b;
+  --text-secondary: #3f3f46;
+  --faq-bg: #ffffff;
+}
+
+html, body {
+  scroll-behavior: smooth;
+  overflow-x: hidden; /* Fixes mobile side-scrolling */
+}
+
+body {
+  background-color: var(--bg-main);
+  background-image: radial-gradient(var(--bg-dots) 1px, transparent 1px);
+  background-size: 20px 20px;
+  color: var(--input-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.prose h2, .prose h3 { color: var(--text-primary) !important; }
+.prose p { color: var(--text-secondary) !important; }
+.faq-item { background-color: var(--faq-bg) !important; }
+
+.nav-link-premium {
+  color: var(--nav-text);
+  position: relative;
+  transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.nav-link-premium:hover { color: var(--nav-hover); }
+.nav-link-premium::after {
+  content: ''; position: absolute; width: 100%; transform: scaleX(0); height: 1px; bottom: -4px; left: 0; background-color: var(--nav-hover); transform-origin: bottom right; transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.nav-link-premium:hover::after { transform: scaleX(1); transform-origin: bottom left; }
+
+.faq-btn { color: var(--text-primary) !important; background-color: transparent !important; }
+.faq-btn * { color: var(--text-primary) !important; }
+.light-mode .faq-item { background-color: var(--faq-bg) !important; }
+.light-mode .faq-item:hover, .light-mode .faq-item:focus-within { background-color: rgba(244, 244, 245, 0.9) !important; }
+.faq-answer { color: var(--text-secondary) !important; }
+
+.hamburger-line { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform-origin: center; }
+
+#mobileMenu {
+  transition: opacity 0.3s ease, transform 0.3s var(--ease-out-expo), visibility 0.3s;
+  background-color: var(--nav-bg);
+  border-bottom: 1px solid var(--nav-border);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in { animation: fadeInUp 0.8s var(--ease-out-expo) forwards; }
+.animate-fade-in-delay-1 { opacity: 0; animation: fadeInUp 0.8s var(--ease-out-expo) 0.15s forwards; }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none; margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield; appearance: none;
+}
+
+/* Premium Button Styling */
+#calcBtn {
+  background-color: var(--logo-primary);
+  color: var(--bg-main);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+#calcBtn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+  z-index: -1;
+}
+#calcBtn:hover::before {
+  left: 100%;
+}
+#calcBtn:hover {
+  opacity: 0.9;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+/* Sidebar ad sticky setup - Narrower size */
+.ad-sidebar {
+  position: sticky;
+  top: 100px;
+  width: 160px; /* Chota size */
+  height: 600px; 
+}
+
+@media (max-width: 1280px) { /* 1280px se niche sidebar hide */
+  .ad-sidebar { display: none; } 
+}

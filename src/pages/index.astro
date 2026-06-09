@@ -1,0 +1,681 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+// Complete updated database metadata loop sync profile
+const countries = [
+  { code: "IN", name: "India", currency: "INR", symbol: "₹" },
+  { code: "US", name: "United States", currency: "USD", symbol: "$" },
+  { code: "GB", name: "United Kingdom", currency: "GBP", symbol: "£" },
+  { code: "DE", name: "Germany", currency: "EUR", symbol: "€" },
+  { code: "CA", name: "Canada", currency: "CAD", symbol: "CA$" },
+  { code: "AU", name: "Australia", currency: "AUD", symbol: "A$" },
+  { code: "AE", name: "UAE", currency: "AED", symbol: "AED" },
+  { code: "SG", name: "Singapore", currency: "SGD", symbol: "S$" },
+  { code: "NL", name: "Netherlands", currency: "EUR", symbol: "€" },
+  { code: "FR", name: "France", currency: "EUR", symbol: "€" },
+  { code: "PK", name: "Pakistan", currency: "PKR", symbol: "₨" },
+  { code: "BD", name: "Bangladesh", currency: "BDT", symbol: "৳" },
+  { code: "NG", name: "Nigeria", currency: "NGN", symbol: "₦" },
+  { code: "BR", name: "Brazil", currency: "BRL", symbol: "R$" },
+  { code: "MX", name: "Mexico", currency: "MXN", symbol: "$" },
+  { code: "PH", name: "Philippines", currency: "PHP", symbol: "₱" },
+  { code: "JP", name: "Japan", currency: "JPY", symbol: "¥" },
+  { code: "KR", name: "South Korea", currency: "KRW", symbol: "₩" },
+  { code: "CH", name: "Switzerland", currency: "CHF", symbol: "CHF" },
+  { code: "SE", name: "Sweden", currency: "SEK", symbol: "kr" },
+  { code: "NO", name: "Norway", currency: "NOK", symbol: "kr" },
+  { code: "DK", name: "Denmark", currency: "DKK", symbol: "kr" },
+  { code: "IE", name: "Ireland", currency: "EUR", symbol: "€" },
+  { code: "NZ", name: "New Zealand", currency: "NZD", symbol: "NZ$" },
+  { code: "ZA", name: "South Africa", currency: "ZAR", symbol: "R" },
+  { code: "EG", name: "Egypt", currency: "EGP", symbol: "E£" },
+  { code: "KE", name: "Kenya", currency: "KES", symbol: "KSh" },
+  
+  // Tax Havens & Middle East
+  { code: "QA", name: "Qatar", currency: "QAR", symbol: "QR" },
+  { code: "SA", name: "Saudi Arabia", currency: "SAR", symbol: "SR" },
+  { code: "BH", name: "Bahrain", currency: "BHD", symbol: "BD" },
+  { code: "KW", name: "Kuwait", currency: "KWD", symbol: "KD" },
+  { code: "OM", name: "Oman", currency: "OMR", symbol: "RO" },
+  { code: "MC", name: "Monaco", currency: "EUR", symbol: "€" },
+  { code: "KY", name: "Cayman Islands", currency: "KYD", symbol: "$" },
+  { code: "BS", name: "Bahamas", currency: "BSD", symbol: "B$" },
+  { code: "BM", name: "Bermuda", currency: "BMD", symbol: "BD$" }
+];
+
+const faqs = [
+  {
+    q: "What is a PPP adjusted salary and why does it matter?",
+    a: "Purchasing Power Parity (PPP) calculates how much currency you need to buy the exact same basket of goods and services in two different countries. Looking at just the nominal conversion rate hides the true value of your pay. A $100k salary in San Francisco feels drastically different than the same converted amount in Berlin or Bangalore due to localized market parameters.",
+  },
+  {
+    q: "Does this calculator include income tax deductions?",
+    a: "No, this calculator strictly evaluates your gross purchasing power parity. Income tax laws change annually and depend heavily on your marital status, investments, and specific local state/canton laws. We recommend taking the PPP value shown here and manually applying your destination country's current tax rates for the absolute final picture.",
+  },
+  {
+    q: "How do localized city tiers affect my international job offer?",
+    a: "Country-wide averages distort reality. Moving from a lower-cost secondary tier city to an elite primary tech capital (like moving from Jaipur to London, or Austin to New York) introduces massive premiums on accommodation, public infrastructure, and baseline services. Always factor in your specific city's cost of living alongside this national PPP baseline.",
+  },
+  {
+    q: "Why should I look past standard spot conversion rates during relocation updates?",
+    a: "Standard interbank forex spot updates tell you what your money is worth at an exchange desk, not what it can buy inside a local grocery store or housing market. If the destination country has elevated service indexes, a nominal 40% jump on currency conversion might collapse into a negative lifestyle shift when weighted correctly.",
+  },
+  {
+    q: "What does a negative Final Net Gain verdict indicate?",
+    a: "A negative metric means your relative standard of living and potential active baseline savings velocity will downscale compared to your current regional lifestyle—even if the raw numeric value on the paper offer seems significantly higher. It means you are losing financial leverage.",
+  },
+  {
+    q: "Where does the baseline standard index source data originate?",
+    a: "The foundational purchasing power metrics and international consumer index datasets are regularly synchronized with trusted global tracking databases, including macro-analysis updates from the World Bank and current live macroeconomic indicators.",
+  }
+];
+---
+
+<Layout
+  title="Real Salary Check | Global Tech PPP Calculator & Cost of Living Index"
+  description="Calculate your true purchasing power parity (PPP) and evaluate international job offers accurately across 35+ countries based on World Bank Indices."
+>
+  <main class="w-full max-w-3xl mx-auto px-4 md:px-6 pt-6 md:pt-10 pb-20 overflow-hidden">
+    <div class="text-center mb-8 md:mb-10 animate-fade-in">
+      <div class="inline-flex items-center gap-2 px-3 py-1 mb-4 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 light-mode:text-emerald-700 text-[10px] font-bold tracking-widest uppercase">
+        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+        </svg>
+        World Bank Indices & Live Rates
+      </div>
+      <h1 class="text-4xl md:text-5xl font-black tracking-tight mb-4" style="color: var(--logo-primary)">Real Salary Check</h1>
+      <p class="text-sm md:text-base max-w-lg mx-auto font-medium leading-relaxed" style="color: var(--nav-text)">
+        Is your foreign job offer actually worth it? Discover your true purchasing power parity (PPP) before relocating.
+      </p>
+    </div>
+
+    <div class="rounded-2xl p-4 md:p-6 space-y-4 transition-all duration-500 shadow-xl hover:shadow-2xl animate-fade-in-delay-1" style="background-color: var(--card-bg); border: 1px solid var(--card-border);">
+      <div class="p-3 md:p-4 rounded-xl border w-full text-left transition-colors duration-300 hover:border-zinc-500/40" style="background-color: var(--inner-box); border-color: var(--card-border);">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="w-full">
+            <label class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80" style="color: var(--nav-text)">Current Country</label>
+            <div class="relative group w-full">
+              <select id="currentCountry" class="w-full appearance-none rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all cursor-pointer hover:bg-white/5" style="background-color: var(--input-bg); border: 1px solid var(--input-border); color: var(--input-text);">
+                {countries.map((c) => (
+                  <option value={c.code}>{c.name} ({c.currency})</option>
+                ))}
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center transition-transform group-hover:translate-y-0.5" style="color: var(--nav-text)">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="w-full">
+            <label class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80" style="color: var(--nav-text)">Current Gross Salary / YR</label>
+            <div class="relative w-full group">
+              <span id="currentSymbol" class="absolute inset-y-0 left-4 flex items-center text-sm font-black transition-colors group-focus-within:text-emerald-500" style="color: var(--nav-text)">₹</span>
+              <input id="currentSalary" type="number" tabindex="1" placeholder="e.g. 1500000" class="w-full rounded-xl pl-10 pr-4 py-2.5 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all hover:bg-white/5" style="background-color: var(--input-bg); border: 1px solid var(--input-border); color: var(--input-text);" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-3 md:p-4 rounded-xl border w-full text-left transition-colors duration-300 hover:border-zinc-500/40" style="background-color: var(--inner-box); border-color: var(--card-border);">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="w-full">
+            <label class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80" style="color: var(--nav-text)">Offer Country</label>
+            <div class="relative group w-full">
+              <select id="offerCountry" class="w-full appearance-none rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all cursor-pointer hover:bg-white/5" style="background-color: var(--input-bg); border: 1px solid var(--input-border); color: var(--input-text);">
+                {countries.map((c) => (
+                  <option value={c.code} selected={c.code === "US"}>{c.name} ({c.currency})</option>
+                ))}
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center transition-transform group-hover:translate-y-0.5" style="color: var(--nav-text)">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="w-full">
+            <label class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80" style="color: var(--nav-text)">Offered Gross Salary / YR</label>
+            <div class="relative w-full group">
+              <span id="offerSymbol" class="absolute inset-y-0 left-4 flex items-center text-sm font-black transition-colors group-focus-within:text-emerald-500" style="color: var(--nav-text)">$</span>
+              <input id="offerSalary" type="number" tabindex="2" placeholder="e.g. 80000" class="w-full rounded-xl pl-10 pr-4 py-2.5 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all hover:bg-white/5" style="background-color: var(--input-bg); border: 1px solid var(--input-border); color: var(--input-text);" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button id="calcBtn" tabindex="3" class="w-full rounded-xl py-3.5 text-sm font-black tracking-widest uppercase transition-all duration-300 shadow-lg cursor-pointer flex justify-center items-center hover:opacity-90 active:scale-[0.98]" style="background-color: var(--logo-primary); color: var(--bg-main);">
+        <span>CALCULATE REAL VALUE →</span>
+      </button>
+    </div>
+
+    <div id="result" class="hidden mt-10 space-y-4 scroll-mt-24 transition-all duration-500">
+      
+      <div id="verdictBanner" class="rounded-2xl p-5 border text-center shadow-lg" style="background-color: var(--card-bg); border-color: var(--card-border);">
+        <span id="verdictBadge" class="text-[11px] font-black uppercase tracking-widest px-5 py-2 rounded-full border"></span>
+      </div>
+
+      <div class="rounded-2xl p-5 md:p-6 border shadow-lg" style="background-color: var(--card-bg); border-color: var(--card-border);">
+        <h2 class="text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2" style="color: var(--text-primary);">
+          <svg class="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+          </svg>
+          Lifestyle Value (PPP Adjusted)
+        </h2>
+        
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <div class="rounded-xl p-4 border text-center" style="background-color: var(--inner-box); border-color: var(--card-border);">
+            <p class="text-[10px] font-bold uppercase tracking-wider mb-1 opacity-70" style="color: var(--nav-text);">Current Life Value</p>
+            <p id="pppCurrent" class="text-xl md:text-2xl font-black" style="color: var(--logo-primary);"></p>
+          </div>
+          <div class="rounded-xl p-4 border text-center" style="background-color: var(--inner-box); border-color: var(--card-border);">
+            <p class="text-[10px] font-bold uppercase tracking-wider mb-1 opacity-70" style="color: var(--nav-text);">Offered Life Value</p>
+            <p id="pppOffer" class="text-xl md:text-2xl font-black" style="color: var(--logo-primary);"></p>
+          </div>
+          <div class="col-span-2 md:col-span-1 rounded-xl p-4 border text-center relative overflow-hidden" style="background-color: var(--inner-box); border-color: var(--card-border);">
+            <p class="text-[10px] font-bold uppercase tracking-wider mb-1 opacity-70" style="color: var(--nav-text);">Purchasing Power Shift</p>
+            <p id="pppChange" class="text-2xl font-black"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-2xl p-5 md:p-6 border bg-amber-500/5" style="border-color: rgba(245, 158, 11, 0.2);">
+        <h3 class="text-sm font-bold mb-3 text-amber-500 flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Reality Check: What does this mean?
+        </h3>
+        <p id="dynamicExplanation" class="text-sm leading-relaxed mb-4" style="color: var(--text-secondary);"></p>
+        
+        <div class="border-t border-amber-500/10 pt-4 mt-4">
+          <p class="text-xs font-bold uppercase tracking-wider mb-2 text-amber-500/80">⚠️ Crucial Manual Considerations:</p>
+          <ul class="text-xs space-y-2" style="color: var(--nav-text);">
+            <li class="flex items-start gap-2"><span class="text-amber-500">•</span> <b>Income Taxes:</b> This calculation is based on GROSS income. You must calculate the income tax of your destination country manually, as it varies by marital status and state.</li>
+            <li class="flex items-start gap-2"><span class="text-amber-500">•</span> <b>City Tier Premiums:</b> PPP is a national average. If moving to an expensive tech hub (e.g., London, NYC, San Francisco), housing costs will heavily skew this number downwards.</li>
+            <li class="flex items-start gap-2"><span class="text-amber-500">•</span> <b>Healthcare & Education:</b> Factor in private insurance costs or schooling fees if they are not publicly subsidized in your target country.</li>
+          </ul>
+        </div>
+      </div>
+
+      <button id="showCalcBtn" class="w-full rounded-xl py-3 text-sm font-bold border transition-all duration-200 cursor-pointer hover:bg-white/5" style="border-color: var(--card-border); color: var(--nav-text);">
+        Show Calculation Breakdown ↓
+      </button>
+
+      <div id="calcBreakdown" class="hidden rounded-2xl p-5 md:p-6 border space-y-4 shadow-lg" style="background-color: var(--card-bg); border-color: var(--card-border);">
+        <div class="flex justify-between items-center mb-2">
+          <p class="text-sm font-bold" style="color: var(--text-primary);">Mathematical Breakdown:</p>
+          <button id="copyBreakdownBtn" class="text-xs font-bold tracking-wider uppercase border rounded-lg px-3 py-1.5 transition-all duration-200 active:scale-95 cursor-pointer flex items-center gap-1.5 hover:bg-white/5" style="border-color: var(--card-border); background-color: var(--inner-box); color: var(--nav-text);">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+            </svg>
+            <span id="copyBtnText">Copy</span>
+          </button>
+        </div>
+        <div id="breakdownContent" class="space-y-3 text-xs md:text-sm font-mono leading-relaxed p-4 rounded-xl border" style="background-color: var(--inner-box); border-color: var(--card-border); color: var(--nav-text);"></div>
+      </div>
+    </div>
+  </main>
+
+  <div id="instantConverterWrapper" class="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-40 font-sans text-left print:hidden">
+    <div id="converterTimedPop" class="absolute bottom-16 right-2 text-[10px] font-black tracking-widest uppercase px-4 py-2 rounded-xl shadow-2xl backdrop-blur-md transition-all duration-500 ease-out translate-y-2 opacity-0 pointer-events-none border select-none" style="background-color: var(--card-bg); border-color: var(--card-border); color: var(--logo-primary);">
+      Currency Converter
+    </div>
+
+    <button id="converterTriggerBtn" class="w-12 h-12 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 active:scale-95 hover:scale-105 cursor-pointer border" style="background-color: var(--card-bg); border-color: var(--card-border); color: var(--logo-primary); display: flex;">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+      </svg>
+    </button>
+
+    <div id="converterExpandedPanel" class="hidden w-72 sm:w-80 md:w-96 rounded-2xl shadow-2xl border p-3.5 backdrop-blur-xl transition-all duration-300 transform scale-95 opacity-0 origin-bottom-right" style="background-color: var(--card-bg); border-color: var(--card-border);">
+      <div class="flex items-center justify-between mb-2.5 border-b pb-1.5" style="border-color: var(--card-border);">
+        <h3 class="text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5" style="color: var(--text-primary);">
+          <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Live Forex
+        </h3>
+        <button id="closeConverterBtn" class="text-xs font-bold opacity-40 hover:opacity-100 transition-all cursor-pointer p-1" style="color: var(--nav-text);">✕</button>
+      </div>
+
+      <div class="space-y-2.5">
+        <div class="p-2 rounded-xl border flex items-center justify-between gap-1.5 transition-colors focus-within:border-emerald-500/50" style="background-color: var(--inner-box); border-color: var(--card-border);">
+          <select id="instantSrcCountry" aria-label="Dynamic Forex Source Profile Dropdown" class="bg-transparent border-0 font-bold text-xs focus:outline-none focus:ring-0 cursor-pointer w-24 text-ellipsis overflow-hidden" style="color: var(--text-primary);">
+            {countries.map((c) => (
+              <option value={c.code} style="background-color: var(--input-bg); color: var(--input-text);">{c.currency} ({c.symbol})</option>
+            ))}
+          </select>
+          <input type="number" id="instantSrcAmount" placeholder="0.00" class="bg-transparent border-0 text-right font-black text-sm focus:outline-none focus:ring-0 w-full p-0" style="color: var(--logo-primary);" />
+        </div>
+
+        <div class="flex justify-center -my-2 relative z-10 select-none">
+          <div class="text-[10px] p-0.5 rounded-full border shadow-sm font-black bg-zinc-800" style="background-color: var(--card-bg); border-color: var(--card-border); color: var(--nav-text);">⇅</div>
+        </div>
+
+        <div class="p-2 rounded-xl border flex items-center justify-between gap-1.5 transition-colors focus-within:border-emerald-500/50" style="background-color: var(--inner-box); border-color: var(--card-border);">
+          <select id="instantTargetCountry" aria-label="Dynamic Forex Target Profile Dropdown" class="bg-transparent border-0 font-bold text-xs focus:outline-none focus:ring-0 cursor-pointer w-24 text-ellipsis overflow-hidden" style="color: var(--text-primary);">
+            {countries.map((c) => (
+              <option value={c.code} selected={c.code === "US"} style="background-color: var(--input-bg); color: var(--input-text);">{c.currency} ({c.symbol})</option>
+            ))}
+          </select>
+          <input type="number" id="instantTargetAmount" placeholder="0.00" class="bg-transparent border-0 text-right font-black text-sm focus:outline-none focus:ring-0 w-full p-0" style="color: var(--logo-primary);" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Mid-Page Ad-Slot: Converter aur FAQs ke beech -->
+<div class="my-12 min-h-[250px] flex items-center justify-center border border-zinc-800/50 rounded-xl overflow-hidden bg-zinc-900/20">
+  <span class="text-[10px] text-zinc-600 uppercase font-bold tracking-widest">Premium Ad Slot</span>
+</div>
+
+  <section class="mt-20 pt-16 border-t" style="border-color: var(--footer-border);">
+    <div class="prose prose-invert max-w-none space-y-12">
+      <div class="text-center max-w-3xl mx-auto mb-12 px-2 hidden md:block">
+        <h2 class="text-2xl md:text-4xl font-black tracking-tight mb-5" style="color: var(--text-primary);">The Ultimate Relocation Indexing System</h2>
+        <p class="font-medium leading-relaxed text-sm md:text-base" style="color: var(--text-secondary);">
+          Normal tools perform linear currency multiplication. RealSalaryCheck utilizes World Bank macro-economic data to reveal your actual purchasing power parity across borders.
+        </p>
+      </div>
+    </div>
+
+    <div class="max-w-3xl mx-auto px-2 mt-12">
+      <h2 class="text-2xl md:text-3xl font-black text-center mb-8" style="color: var(--text-primary);">Frequently Asked Questions</h2>
+      <div class="space-y-4" id="faqContainer">
+        {faqs.map((faq) => (
+          <div class="faq-item border rounded-xl overflow-hidden transition-colors" style="border-color: var(--card-border);">
+            <button class="faq-btn w-full text-left px-5 md:px-6 py-4 md:py-5 font-bold text-sm flex justify-between items-center cursor-pointer hover:bg-white/5 transition-colors">
+              <span>{faq.q}</span>
+              <svg class="faq-icon w-5 h-5 flex-shrink-0 transform transition-transform duration-300" style="color: var(--nav-text);" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-answer hidden px-5 md:px-6 pb-5 text-sm leading-relaxed border-t pt-4" style="border-color: var(--card-border);">{faq.a}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  interface CountryConfig {
+    name : string;
+    symbol: string;
+    currency: string;
+    pppFactor: number;
+  }
+
+  const countryMetrics: Record<string, CountryConfig> = {
+    IN: { name: "India", symbol: "₹", currency: "INR", pppFactor: 0.229 },
+    US: { name: "United States", symbol: "$", currency: "USD", pppFactor: 1.0 },
+    GB: { name: "United Kingdom", symbol: "£", currency: "GBP", pppFactor: 0.71 },
+    DE: { name: "Germany", symbol: "€", currency: "EUR", pppFactor: 0.78 },
+    CA: { name: "Canada", symbol: "CA$", currency: "CAD", pppFactor: 0.83 },
+    AU: { name: "Australia", symbol: "A$", currency: "AUD", pppFactor: 0.85 },
+    AE: { name: "UAE", symbol: "AED", currency: "AED", pppFactor: 0.93 },
+    SG: { name: "Singapore", symbol: "S$", currency: "SGD", pppFactor: 0.89 },
+    NL: { name: "Netherlands", symbol: "€", currency: "EUR", pppFactor: 0.76 },
+    FR: { name: "France", symbol: "€", currency: "EUR", pppFactor: 0.75 },
+    PK: { name: "Pakistan", symbol: "₨", currency: "PKR", pppFactor: 0.17 },
+    BD: { name: "Bangladesh", symbol: "৳", currency: "BDT", pppFactor: 0.2 },
+    NG: { name: "Nigeria", symbol: "₦", currency: "NGN", pppFactor: 0.14 },
+    BR: { name: "Brazil", symbol: "R$", currency: "BRL", pppFactor: 0.31 },
+    MX: { name: "Mexico", symbol: "$", currency: "MXN", pppFactor: 0.29 },
+    PH: { name: "Philippines", symbol: "₱", currency: "PHP", pppFactor: 0.2 },
+    JP: { name: "Japan", symbol: "¥", currency: "JPY", pppFactor: 0.65 },
+    KR: { name: "South Korea", symbol: "₩", currency: "KRW", pppFactor: 0.72 },
+    CH: { name: "Switzerland", symbol: "CHF", currency: "CHF", pppFactor: 0.92 },
+    SE: { name: "Sweden", symbol: "kr", currency: "SEK", pppFactor: 0.8 },
+    NO: { name: "Norway", symbol: "kr", currency: "NOK", pppFactor: 0.88 },
+    DK: { name: "Denmark", symbol: "kr", currency: "DKK", pppFactor: 0.82 },
+    IE: { name: "Ireland", symbol: "€", currency: "EUR", pppFactor: 0.79 },
+    NZ: { name: "New Zealand", symbol: "NZ$", currency: "NZD", pppFactor: 0.78 },
+    ZA: { name: "South Africa", symbol: "R", currency: "ZAR", pppFactor: 0.22 },
+    EG: { name: "Egypt", symbol: "E£", currency: "EGP", pppFactor: 0.15 },
+    KE: { name: "Kenya", symbol: "KSh", currency: "KES", pppFactor: 0.12 },
+    
+    QA: { name: "Qatar", symbol: "QR", currency: "QAR", pppFactor: 0.87 },
+    SA: { name: "Saudi Arabia", symbol: "SR", currency: "SAR", pppFactor: 0.62 },
+    BH: { name: "Bahrain", symbol: "BD", currency: "BHD", pppFactor: 0.81 },
+    KW: { name: "Kuwait", symbol: "KD", currency: "KWD", pppFactor: 0.89 },
+    OM: { name: "Oman", symbol: "RO", currency: "OMR", pppFactor: 0.59 },
+    MC: { name: "Monaco", symbol: "€", currency: "EUR", pppFactor: 1.62 },
+    KY: { name: "Cayman Islands", symbol: "$", currency: "KYD", pppFactor: 1.35 },
+    BS: { name: "Bahamas", symbol: "B$", currency: "BSD", pppFactor: 0.94 },
+    BM: { name: "Bermuda", symbol: "BD$", currency: "BMD", pppFactor: 1.48 }
+  };
+
+  let pppData: Record<string, number> = {};
+
+  async function fetchPPPData(): Promise<Record<string, number>> {
+    const countryList = "IN;US;GB;DE;CA;AU;AE;SG;NL;FR;PK;BD;NG;BR;MX;PH;JP;KR;CH;SE;NO;DK;IE;NZ;ZA;EG;KE;QA;SA;BH;KW;OM;KY;BS;BM";
+    const url = `https://api.worldbank.org/v2/country/${countryList}/indicator/PA.NUS.PPP?format=json&mrv=1&per_page=60`;
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      if (!data || !data[1]) throw new Error("PPP API failed");
+      const result: Record<string, number> = {};
+      data[1].forEach((item: any) => {
+        if (item.value !== null) { result[item.countryiso3code] = item.value; }
+      });
+      return result;
+    } catch (e) {
+      console.warn("PPP fetch failed, using hardcoded fallback");
+      return {};
+    }
+  }
+
+  const iso3to2: Record<string, string> = {
+    IND: "IN", USA: "US", GBR: "GB", DEU: "DE", CAN: "CA", AUS: "AU", ARE: "AE", SGP: "SG",
+    NLD: "NL", FRA: "FR", PAK: "PK", BGD: "BD", NGA: "NG", BRA: "BR", MEX: "MX", PHL: "PH",
+    JPN: "JP", KOR: "KR", CHE: "CH", SWE: "SE", NOR: "NO", DNK: "DK", IRL: "IE", NZL: "NZ",
+    ZAF: "ZA", EGY: "EG", KEN: "KE", QAT: "QA", SAU: "SA", BHR: "BH", KWT: "KW", OMN: "OM",
+    CYM: "KY", BHS: "BS", BMU: "BM"
+  };
+
+  const currentCountryEl = document.getElementById("currentCountry") as HTMLSelectElement;
+  const offerCountryEl = document.getElementById("offerCountry") as HTMLSelectElement;
+  const currentSymbolEl = document.getElementById("currentSymbol");
+  const offerSymbolEl = document.getElementById("offerSymbol");
+  const calcBtn = document.getElementById("calcBtn") as HTMLButtonElement;
+
+  function fmt(n: number) {
+    return "$" + n.toLocaleString(undefined, { maximumFractionDigits: 0 });
+  }
+
+  currentCountryEl?.addEventListener("change", () => {
+    const code = currentCountryEl.value;
+    if (currentSymbolEl) currentSymbolEl.textContent = countryMetrics[code]?.symbol || "$";
+  });
+
+  offerCountryEl?.addEventListener("change", () => {
+    const code = offerCountryEl.value;
+    if (offerSymbolEl) offerSymbolEl.textContent = countryMetrics[code]?.symbol || "$";
+  });
+
+  async function engineCompute() {
+    const cc = currentCountryEl.value;
+    const oc = offerCountryEl.value;
+    const currentSalaryInp = document.getElementById("currentSalary") as HTMLInputElement;
+    const offerSalaryInput = document.getElementById("offerSalary") as HTMLInputElement;
+    const cs = parseFloat(currentSalaryInp.value);
+    const os = parseFloat(offerSalaryInput.value);
+
+    if (!cs || !os) {
+      alert("Please fill in both gross salary fields.");
+      return;
+    }
+
+    const resultDiv = document.getElementById("result")!;
+    resultDiv.classList.add("hidden");
+    document.getElementById("calcBreakdown")!.classList.add("hidden");
+    document.getElementById("showCalcBtn")!.textContent = "Show Calculation Breakdown ↓";
+
+    if (calcBtn) {
+      calcBtn.innerHTML = "<span class='animate-pulse'>RUNNING ANALYSIS...</span>";
+      calcBtn.disabled = true;
+      calcBtn.style.opacity = "0.7";
+    }
+
+    try {
+      const cc_data = countryMetrics[cc];
+      const oc_data = countryMetrics[oc];
+      const currentCurrency = cc_data.currency;
+      const targetCurrency = oc_data.currency;
+
+      const ratesFetch = fetch("https://open.er-api.com/v6/latest/USD")
+        .then((r) => r.json())
+        .catch(() => ({
+          result: "fallback",
+          rates: { [currentCurrency]: 1, [targetCurrency]: 1 },
+        }));
+
+      const pppFetch = fetchPPPData();
+      const [ratesRes, rawPPP] = await Promise.all([ratesFetch, pppFetch]);
+
+      (window as any).latestFetchedRates = ratesRes;
+
+      function getPPP(countryCode: string, exchangeRatePerUSD: number): number {
+        const iso3 = Object.keys(iso3to2).find((k) => iso3to2[k] === countryCode);
+        let rawVal = countryMetrics[countryCode]?.pppFactor || 1;
+        if (iso3 && rawPPP[iso3]) { rawVal = rawPPP[iso3]; }
+        if (exchangeRatePerUSD > 1) { return rawVal * 100; }
+        return rawVal;
+      }
+
+      const currentRate = ratesRes.rates[currentCurrency] || 1;
+      const targetRate = ratesRes.rates[targetCurrency] || 1;
+
+      const cc_raw_ppp = getPPP(cc, currentRate);
+      const oc_raw_ppp = getPPP(oc, targetRate);
+
+      // NO TAX CALCULATIONS - Pure PPP conversion on Gross Salary
+      const currentSalaryUSD = cs / currentRate;
+      const offerSalaryUSD = os / targetRate;
+
+      const currentPPP = cs / cc_raw_ppp;
+      const offerPPP = os / oc_raw_ppp;
+
+      const pppChangePct = ((offerPPP - currentPPP) / currentPPP) * 100;
+
+      resultDiv.classList.remove("hidden");
+
+      // FIX: Ensure objects are resolved before string interpolation
+      const ccName = cc_data?.name || cc;
+      const ocName = oc_data?.name || oc;
+
+      const verdictBadge = document.getElementById("verdictBadge")!;
+      const dynamicExplanation = document.getElementById("dynamicExplanation")!;
+      
+      if (pppChangePct > 15) {
+        verdictBadge.textContent = "Accept — Strong Financial Upgrade";
+        verdictBadge.className = "text-[11px] font-black uppercase tracking-widest px-5 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 shadow-sm";
+        dynamicExplanation.innerHTML = `Great news! Even adjusting for the local cost of goods, your lifestyle purchasing power increases by <b>${pppChangePct.toFixed(1)}%</b>. This means you will mathematically be able to afford a significantly better lifestyle in <b>${ocName}</b> than you currently have in <b>${ccName}</b>.`;
+      } else if (pppChangePct >= -5 && pppChangePct <= 15) {
+        verdictBadge.textContent = "Negotiate — Marginal Shift";
+        verdictBadge.className = "text-[11px] font-black uppercase tracking-widest px-5 py-2 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-500 shadow-sm";
+        dynamicExplanation.innerHTML = `Your purchasing power shift is marginal (<b>${pppChangePct.toFixed(1)}%</b>). While the absolute numbers might look different, your actual day-to-day standard of living will remain relatively similar in <b>${ocName}</b> compared to <b>${ccName}</b>. We recommend negotiating the offer higher to account for relocation risks.`;
+      } else {
+        verdictBadge.textContent = "Reject — Lifestyle Value Drops";
+        verdictBadge.className = "text-[11px] font-black uppercase tracking-widest px-5 py-2 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-500 shadow-sm";
+        dynamicExplanation.innerHTML = `Warning: Despite the numeric value of the offer, the high cost of living in <b>${ocName}</b> means your true purchasing power actually <b>drops by ${Math.abs(pppChangePct).toFixed(1)}%</b>. You will likely face a downgrade in your lifestyle compared to <b>${ccName}</b> unless you secure a higher salary.`;
+      }
+
+      const formatChangeText = (val: number) => `${val >= 0 ? "▲ +" : "▼ "}${val.toFixed(2)}%`;
+      const getChangeColorClass = (val: number) => val >= 0 ? "text-emerald-500" : "text-rose-500";
+
+      document.getElementById("pppCurrent")!.textContent = fmt(currentPPP);
+      document.getElementById("pppOffer")!.textContent = fmt(offerPPP);
+
+      const pppChangeEl = document.getElementById("pppChange")!;
+      pppChangeEl.textContent = formatChangeText(pppChangePct);
+      pppChangeEl.className = `text-2xl font-black mt-1 ${getChangeColorClass(pppChangePct)}`;
+
+      document.getElementById("breakdownContent")!.innerHTML = `
+        <p class="font-bold text-sm uppercase tracking-wider border-b border-zinc-700/50 pb-1 mb-2 mt-1" style="color: var(--text-primary);">RAW CONVERSIONS (USD)</p>
+        <p>• Current Gross: ${cc_data.symbol}${cs.toLocaleString()} ${cc_data.currency}/yr ≈ ${fmt(currentSalaryUSD)} USD</p>
+        <p>• Offered Gross: ${oc_data.symbol}${os.toLocaleString()} ${oc_data.currency}/yr ≈ ${fmt(offerSalaryUSD)} USD</p>
+        
+        <p class="font-bold text-sm uppercase tracking-wider border-b border-zinc-700/50 pb-1 mt-6 mb-2" style="color: var(--text-primary);">PPP ADJUSTMENT MATH</p>
+        <p>• Current Real Value: ${cc_data.symbol}${cs.toLocaleString()} ÷ ${cc_raw_ppp.toFixed(2)} (World Bank Factor) = <b>${fmt(currentPPP)}</b></p>
+        <p>• Offered Real Value: ${oc_data.symbol}${os.toLocaleString()} ÷ ${oc_raw_ppp.toFixed(2)} (World Bank Factor) = <b>${fmt(offerPPP)}</b></p>
+        <p>• Purchasing Power Shift: <b>${formatChangeText(pppChangePct)}</b></p>
+      `;
+
+      // Copy to clipboard execution
+      document.getElementById("copyBreakdownBtn")?.addEventListener("click", () => {
+        const targetContainer = document.getElementById("breakdownContent");
+        if (!targetContainer) return;
+        const rawPlaintext = (targetContainer.innerText || targetContainer.textContent || "").trim();
+        const btnText = document.getElementById("copyBtnText")!;
+        
+        function updateButtonVisuals() {
+          btnText.textContent = "Copied!";
+          setTimeout(() => { if (btnText) btnText.textContent = "Copy"; }, 2000);
+        }
+        
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(rawPlaintext).then(updateButtonVisuals).catch(() => fallbackCopyExecution(rawPlaintext));
+        } else {
+          fallbackCopyExecution(rawPlaintext);
+        }
+        
+        function fallbackCopyExecution(text: string) {
+          const textArea = document.createElement("textarea");
+          textArea.value = text;
+          textArea.style.position = "fixed"; textArea.style.top = "-9999px";
+          document.body.appendChild(textArea);
+          textArea.focus(); textArea.select();
+          try {
+            if (document.execCommand("copy")) updateButtonVisuals();
+          } catch (err) {}
+          document.body.removeChild(textArea);
+        }
+      });
+
+      resultDiv.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (e) {
+      console.error(e);
+      alert("Error fetching live rates. Please try again.");
+    } finally {
+      if (calcBtn) {
+        calcBtn.innerHTML = "<span>CALCULATE REAL VALUE →</span>";
+        calcBtn.disabled = false;
+        calcBtn.style.opacity = "1";
+      }
+    }
+  }
+
+  calcBtn?.addEventListener("click", engineCompute);
+
+  document.getElementById("showCalcBtn")?.addEventListener("click", () => {
+    const breakdown = document.getElementById("calcBreakdown")!;
+    const btn = document.getElementById("showCalcBtn")!;
+    breakdown.classList.toggle("hidden");
+    btn.textContent = breakdown.classList.contains("hidden") ? "Show Calculation Breakdown ↓" : "Hide Calculation Breakdown ↑";
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".faq-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const answer = btn.nextElementSibling;
+        const icon = btn.querySelector(".faq-icon");
+        document.querySelectorAll(".faq-btn").forEach((other) => {
+          if (other !== btn) {
+            other.nextElementSibling?.classList.add("hidden");
+            other.querySelector(".faq-icon")?.classList.remove("rotate-180");
+          }
+        });
+        answer?.classList.toggle("hidden");
+        icon?.classList.toggle("rotate-180");
+      });
+    });
+    document.getElementById("currentSalary")?.focus();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      const active = document.activeElement;
+      const cInp = document.getElementById("currentSalary");
+      const oInp = document.getElementById("offerSalary");
+      if (active === cInp) {
+        e.preventDefault();
+        (oInp as HTMLElement)?.focus();
+      } else if (active === oInp) {
+        e.preventDefault();
+        calcBtn?.click();
+      }
+    }
+  }); 
+
+  // WIDGET INTERFACE OPERATIONAL ENGINE LOGIC
+  const triggerBtn = document.getElementById("converterTriggerBtn")!;
+  const expandedPanel = document.getElementById("converterExpandedPanel")!;
+  const closeBtn = document.getElementById("closeConverterBtn")!;
+  const timedPopBubble = document.getElementById("converterTimedPop")!;
+
+  const srcCountrySelect = document.getElementById("instantSrcCountry") as HTMLSelectElement;
+  const targetCountrySelect = document.getElementById("instantTargetCountry") as HTMLSelectElement;
+  const srcAmountInput = document.getElementById("instantSrcAmount") as HTMLInputElement;
+  const targetAmountInput = document.getElementById("instantTargetAmount") as HTMLInputElement;
+
+  let liveConverterRates: Record<string, number> = {
+    INR: 83.50, USD: 1.00, GBP: 0.78, EUR: 0.92, CAD: 1.36, AUD: 1.51, AED: 3.67, SGD: 1.35
+  };
+
+  function runLoopingPopSystem() {
+    setTimeout(() => {
+      showTimedPopNotification();
+      setInterval(() => { showTimedPopNotification(); }, 45000);
+    }, 15000);
+  }
+
+  function showTimedPopNotification() {
+    if (expandedPanel.style.display !== "block") {
+      timedPopBubble.classList.remove("opacity-0", "translate-y-2");
+      timedPopBubble.classList.add("opacity-100", "translate-y-0");
+      setTimeout(() => {
+        timedPopBubble.classList.remove("opacity-100", "translate-y-0");
+        timedPopBubble.classList.add("opacity-0", "translate-y-2");
+      }, 4000);
+    }
+  }
+
+  triggerBtn.addEventListener("click", () => {
+    triggerBtn.style.display = "none";
+    timedPopBubble.classList.remove("opacity-100", "translate-y-0");
+    timedPopBubble.classList.add("opacity-0", "translate-y-2");
+    expandedPanel.classList.remove("hidden");
+    expandedPanel.style.display = "block";
+    setTimeout(() => {
+      expandedPanel.classList.remove("scale-95", "opacity-0");
+      expandedPanel.classList.add("scale-100", "opacity-100");
+    }, 10);
+    syncCalculationsEngine('source');
+  });
+
+  closeBtn.addEventListener("click", () => {
+    expandedPanel.classList.remove("scale-100", "opacity-100");
+    expandedPanel.classList.add("scale-95", "opacity-0");
+    setTimeout(() => {
+      expandedPanel.style.display = "none";
+      expandedPanel.classList.add("hidden");
+      triggerBtn.style.display = "flex";
+    }, 200);
+  });
+
+  function getCurrencyToken(countryCode: string): string {
+    const tokens: Record<string, string> = {
+      IN: "INR", US: "USD", GB: "GBP", DE: "EUR", CA: "CAD", AU: "AUD", AE: "AED", SG: "SGD",
+      NL: "EUR", FR: "EUR", PK: "PKR", BD: "BDT", NG: "NGN", BR: "BRL", MX: "MXN", PH: "PHP",
+      JP: "JPY", KR: "KRW", CH: "CHF", SE: "SEK", NO: "NOK", DK: "DKK", IE: "EUR", NZ: "NZD",
+      ZA: "ZAR", EG: "EGP", KE: "KES", QA: "QAR", SA: "SAR", BH: "BHD", KW: "KWD", OM: "OMR"
+    };
+    return tokens[countryCode] || "USD";
+  }
+
+  function syncCalculationsEngine(activeSource: 'source' | 'target') {
+    const srcCurrency = getCurrencyToken(srcCountrySelect.value);
+    const targetCurrency = getCurrencyToken(targetCountrySelect.value);
+    const currentUSDRes = (window as any).latestFetchedRates;
+    if (currentUSDRes && currentUSDRes.rates) { liveConverterRates = currentUSDRes.rates; }
+    const srcRateUSD = liveConverterRates[srcCurrency] || 1;
+    const targetRateUSD = liveConverterRates[targetCurrency] || 1;
+
+    if (activeSource === 'source') {
+      const srcVal = parseFloat(srcAmountInput.value);
+      if (isNaN(srcVal)) { targetAmountInput.value = ""; return; }
+      targetAmountInput.value = ((srcVal / srcRateUSD) * targetRateUSD).toFixed(2);
+    } else {
+      const targetVal = parseFloat(targetAmountInput.value);
+      if (isNaN(targetVal)) { srcAmountInput.value = ""; return; }
+      srcAmountInput.value = ((targetVal / targetRateUSD) * srcRateUSD).toFixed(2);
+    }
+  }
+
+  srcAmountInput.addEventListener("input", () => syncCalculationsEngine('source'));
+  targetAmountInput.addEventListener("input", () => syncCalculationsEngine('target'));
+  srcCountrySelect.addEventListener("change", () => syncCalculationsEngine('source'));
+  targetCountrySelect.addEventListener("change", () => syncCalculationsEngine('source'));
+
+  runLoopingPopSystem();
+</script>
