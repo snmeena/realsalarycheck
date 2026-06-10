@@ -1,0 +1,155 @@
+---
+// src/pages/compare/[from]-to-[to].astro
+import Layout from "../../layouts/Layout.astro";
+import countries from "../../data/countries.json";
+
+
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (let i = 0; i < countries.length; i++) {
+    for (let j = 0; j < countries.length; j++) {
+      if (i !== j) {
+        paths.push({
+          params: { from: countries[i].code.toLowerCase(), to: countries[j].code.toLowerCase() },
+          props: { currentCountry: countries[i], offerCountry: countries[j] }
+        });
+      }
+    }
+  }
+  return paths;
+}
+
+
+
+const { currentCountry, offerCountry } = Astro.props;
+
+const dynamicFAQs = [
+  {
+    q: `Is moving from ${currentCountry.name} to ${offerCountry.name} financially worth it?`,
+    a: `Determining if a move from ${currentCountry.name} to ${offerCountry.name} is profitable depends on Purchasing Power Parity (PPP). While your numeric salary in ${offerCountry.currency} might look higher, the local cost of goods and services in ${offerCountry.name} will dictate your actual quality of life change.`
+  },
+  {
+    q: `How does the cost of living differ between ${currentCountry.name} and ${offerCountry.name}?`,
+    a: `Based on current economic indicators, ${offerCountry.name} has a different price index for rentals, utilities, and daily essentials compared to ${currentCountry.name}. Our PPP calculator uses World Bank data to normalize these differences and show your true spending power.`
+  },
+  {
+    q: `What is the expected lifestyle shift when relocating from ${currentCountry.name}?`,
+    a: `Professionals relocating to ${offerCountry.name} often face a "hidden" tax—the cost of living adjustment. Even with a 20% nominal raise, if ${offerCountry.name}'s local market is 30% more expensive, you will experience a net lifestyle downgrade.`
+  }
+];
+const pageTitle = `Equivalent Salary: ${currentCountry.name} to ${offerCountry.name} Index`;
+const altDestinations = countries.filter(c => c.code !== currentCountry.code && c.code !== offerCountry.code).slice(0, 3);
+const altOrigins = countries.filter(c => c.code !== offerCountry.code && c.code !== currentCountry.code).slice(3, 6);
+---
+
+<Layout title={pageTitle}>
+  <main class="w-full max-w-3xl mx-auto px-4 md:px-6 pt-10 pb-20 overflow-hidden text-center sm:text-left">
+    
+    <div class="flex items-center justify-center sm:justify-start gap-2 text-[10px] font-black uppercase tracking-widest opacity-50 mb-8" style="color: var(--nav-text);">
+      <a href="/" class="hover:text-emerald-500 transition-colors">Home</a>
+      <span>/</span>
+      <span class="text-emerald-500">Comparison Dashboard</span>
+    </div>
+
+    <div class="relative rounded-3xl p-6 md:p-10 border overflow-hidden mb-12" style="background-color: var(--card-bg); border-color: var(--card-border);">
+      <div class="relative z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-500 text-[10px] font-black uppercase tracking-widest">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          PPP Comparison Active
+        </div>
+        <h1 class="text-3xl md:text-5xl font-black tracking-tight mb-6 leading-[1.15]" style="color: var(--logo-primary)">
+          Relocating from {currentCountry.name} to {offerCountry.name}?
+        </h1>
+        <p class="text-sm md:text-base opacity-80 max-w-2xl leading-relaxed mb-8" style="color: var(--text-secondary);">
+          Moving between <strong>{currentCountry.currency}</strong> and <strong>{offerCountry.currency}</strong> markets involves more than just currency conversion. Discover your true purchasing power parity today.
+        </p>
+        
+        <a href={`/?from=${currentCountry.code}&to=${offerCountry.code}`} class="inline-flex items-center gap-3 bg-emerald-500 text-zinc-950 px-6 py-3.5 rounded-xl font-black tracking-widest text-[11px] uppercase transition-all hover:scale-[1.02] active:scale-95 shadow-lg shadow-emerald-500/10">
+          Open Live Analysis Tool
+          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
+      <div class="p-5 rounded-2xl border" style="background-color: var(--inner-box); border-color: var(--card-border);">
+        <h2 class="text-[10px] font-black uppercase tracking-widest mb-2 opacity-60" style="color: var(--nav-text);">Local Market Source</h2>
+        <div class="text-xl font-bold mb-1" style="color: var(--text-primary);">{currentCountry.name}</div>
+        <div class="text-xs font-mono font-bold text-emerald-500">{currentCountry.currency} ({currentCountry.symbol})</div>
+      </div>
+      <div class="p-5 rounded-2xl border" style="background-color: var(--inner-box); border-color: var(--card-border);">
+        <h2 class="text-[10px] font-black uppercase tracking-widest mb-2 opacity-60" style="color: var(--nav-text);">Destination Market</h2>
+        <div class="text-xl font-bold mb-1" style="color: var(--text-primary);">{offerCountry.name}</div>
+        <div class="text-xs font-mono font-bold text-emerald-500">{offerCountry.currency} ({offerCountry.symbol})</div>
+      </div>
+    </div>
+
+    <div class="prose prose-invert max-w-none mb-16 text-left">
+      <h2 class="text-xl md:text-2xl font-black mb-4" style="color: var(--text-primary);">Why PPP Matters for {offerCountry.name}</h2>
+      <p class="text-xs md:text-sm leading-relaxed mb-4" style="color: var(--text-secondary);">
+        When you compare a salary in <strong>{currentCountry.name}</strong> to one in <strong>{offerCountry.name}</strong>, looking at the market exchange rate is a common mistake. Market rates are for traders; <strong>Purchasing Power Parity (PPP)</strong> is for people.
+      </p>
+      <div class="p-5 my-6 rounded-xl border-l-4 border-emerald-500 bg-emerald-500/[0.02]" style="border-color: #10b981;">
+        <p class="italic text-xs font-medium m-0" style="color: var(--text-secondary);">
+          "A salary package indexed in {offerCountry.currency} inside {offerCountry.name} might provide a completely unexpected lifestyle footprint shift once core consumer spending baskets are calculated."
+        </p>
+      </div>
+    </div>
+
+    <section class="space-y-4 text-left">
+      <h2 class="text-lg font-black mb-6 text-center" style="color: var(--text-primary);">Relocation FAQs: {currentCountry.code} to {offerCountry.code}</h2>
+      {dynamicFAQs.map(faq => (
+        <div class="p-6 rounded-2xl border transition-colors duration-200" style="background-color: var(--card-bg); border-color: var(--card-border);">
+          <h3 class="text-sm font-bold mb-3 flex gap-2" style="color: var(--text-primary);">
+            <span class="text-emerald-500 font-black">Q.</span> {faq.q}
+          </h3>
+          <p class="text-xs leading-relaxed pl-5" style="color: var(--text-secondary);">
+            {faq.a}
+          </p>
+        </div>
+      ))}
+    </section>
+
+    <section class="mt-20 pt-12 border-t text-left max-w-3xl mx-auto" style="border-color: var(--footer-border);">
+      <h2 class="text-lg font-black mb-6" style="color: var(--text-primary);">Explore Related Salary Comparisons</h2>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        
+        <div class="space-y-2">
+          <h3 class="text-[9px] font-black uppercase tracking-widest text-emerald-500">Reverse Pathway</h3>
+          <a href={`/compare/${offerCountry.code.toLowerCase()}-to-${currentCountry.code.toLowerCase()}`} class="block p-4 rounded-xl border transition-all duration-200 hover:border-emerald-500/40 hover:bg-emerald-500/[0.02]" style="background-color: var(--inner-box); border-color: var(--card-border);">
+            <div class="text-[11px] font-bold opacity-60 mb-0.5" style="color: var(--text-secondary);">Moving back?</div>
+            <div class="text-xs font-black" style="color: var(--text-primary);">{offerCountry.name} to {currentCountry.name}</div>
+          </a>
+        </div>
+
+        <div class="space-y-2">
+          <h3 class="text-[9px] font-black uppercase tracking-widest text-emerald-500">From {currentCountry.code} to Elsewhere</h3>
+          <div class="flex flex-col gap-1.5">
+            {altDestinations.map(alt => (
+              <a href={`/compare/${currentCountry.code.toLowerCase()}-to-${alt.code.toLowerCase()}`} class="text-xs font-bold transition-colors py-1.5 border-b flex justify-between items-center group/link" style="color: var(--text-secondary); border-color: var(--footer-border);">
+                <span class="group-hover/link:text-emerald-500 transition-colors">To {alt.name}</span>
+                <span class="opacity-30 group-hover/link:opacity-100 transition-opacity">→</span>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <h3 class="text-[9px] font-black uppercase tracking-widest text-emerald-500">Relocating to {offerCountry.code}</h3>
+          <div class="flex flex-col gap-1.5">
+            {altOrigins.map(alt => (
+              <a href={`/compare/${alt.code.toLowerCase()}-to-${offerCountry.code.toLowerCase()}`} class="text-xs font-bold transition-colors py-1.5 border-b flex justify-between items-center group/link" style="color: var(--text-secondary); border-color: var(--footer-border);">
+                <span class="group-hover/link:text-emerald-500 transition-colors">From {alt.name}</span>
+                <span class="opacity-30 group-hover/link:opacity-100 transition-opacity">→</span>
+              </a>
+            ))}
+          </div>
+        </div>
+
+      </div>
+    </section>
+    </main>
+</Layout>
+

@@ -2,10 +2,129 @@
 import "../styles/global.css";
 
 const {
-  title = "Real Salary Check | Global Tech PPP Calculator",
-  description = "Compare job offers globally. Discover your true international purchasing power, local tax burdens, and cost of living metrics before relocating.",
+  title = "RealSalaryCheck | PPP Salary Calculator & International Comparison",
+  description = "Compare international job offers with RealSalaryCheck. Calculate true purchasing power parity (PPP), cost of living adjustments, and gross lifestyle value before relocating.",
+  canonicalURL = "https://realsalarycheck.com", // Aapka absolute domain link yahan
 } = Astro.props;
 ---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="robots" content="index, follow" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="https://realsalarycheck.com/og-image.png" />
+
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content="https://realsalarycheck.com/og-image.png" />
+
+    <script type="application/ld+json" is:inline>
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://realsalarycheck.com/#organization",
+            "name": "RealSalaryCheck",
+            "url": "https://realsalarycheck.com",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://realsalarycheck.com/og-image.png",
+              "width": "1200",
+              "height": "630"
+            },
+            "sameAs": []
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://realsalarycheck.com/#website",
+            "url": "https://realsalarycheck.com",
+            "name": "RealSalaryCheck",
+            "description": "Advanced international salary comparison tool using purchasing power parity (PPP) adjustments.",
+            "publisher": {
+              "@id": "https://realsalarycheck.com/#organization"
+            },
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://realsalarycheck.com/?q={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://realsalarycheck.com/#webapplication",
+            "name": "RealSalaryCheck PPP Calculator",
+            "url": "https://realsalarycheck.com",
+            "description": "Calculate true purchasing power parity (PPP) and compare international job offers accurately based on World Bank macroeconomic data.",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "All",
+            "browserRequirements": "Requires JavaScript",
+            "features": "PPP Adjustments, Global Currency Conversions, Cost of Living Multipliers",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            }
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://realsalarycheck.com/#breadcrumb",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://realsalarycheck.com"
+              }
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://realsalarycheck.com/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What is a PPP adjusted salary and why does it matter?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Purchasing Power Parity (PPP) calculates how much currency you need to buy the exact same basket of goods and services in two different countries. Looking at just the nominal conversion rate hides the true value of your pay."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does this calculator include income tax deductions?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No, this calculator strictly evaluates your gross purchasing power parity. Income tax laws change annually and depend heavily on individual variables."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Why should I look past standard spot conversion rates during relocation updates?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Standard interbank forex spot updates tell you what your money is worth at an exchange desk, not what it can buy inside a local grocery store or housing market."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
 
 <!doctype html>
 <html lang="en">
@@ -42,7 +161,29 @@ const {
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#09090b" />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f4f5" />
 
-   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    <script is:inline>
+      
+     window.addEventListener('DOMContentLoaded', () => {
+       if ('requestIdleCallback' in window) {
+         requestIdleCallback(() => {
+           const script = document.createElement('script');
+           script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXX";
+           script.crossOrigin = "anonymous";
+           script.async = true;
+           document.head.appendChild(script);
+         });
+       } else {
+         setTimeout(() => {
+           const script = document.createElement('script');
+           script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXX";
+           script.crossOrigin = "anonymous";
+           script.async = true;
+           document.head.appendChild(script);
+         }, 2000);
+       }
+     });
+      
+   </script>
 
     <script type="application/ld+json" is:inline>
       {
@@ -197,47 +338,69 @@ const {
       <slot />
     </div>
 
-    <footer
-      class="border-t py-12 px-4 md:px-6 transition-colors duration-300"
-      style="border-color: var(--footer-border); background-color: transparent;"
-    >
-      <div
-        class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left"
+   <footer
+  class="border-t py-12 px-4 md:px-6 transition-colors duration-300"
+  style="border-color: var(--footer-border); background-color: transparent;"
+>
+  <div
+    class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left"
+  >
+    <div class="space-y-3 max-w-sm">
+      <a
+        href="/"
+        class="font-black text-lg tracking-tight select-none"
+        style="color: var(--logo-primary);"
       >
-        <div class="space-y-3 max-w-sm">
-          <a
-            href="/"
-            class="font-black text-lg tracking-tight select-none"
-            style="color: var(--logo-primary);"
-          >
-            Real<span style="color: var(--logo-secondary);">SalaryCheck</span>
-          </a>
-          <p
-            class="text-sm font-medium leading-relaxed"
-            style="color: var(--nav-text);"
-          >
-            Compare job offers globally. Discover your true international
-            purchasing power after local taxes and cost of living.
-          </p>
-        </div>
-        <div class="flex flex-col items-center md:items-end gap-5">
-          <div
-            class="flex flex-wrap justify-center items-center gap-x-6 gap-y-3 text-sm font-semibold"
-          >
-            <a href="/about" class="nav-link-premium">About</a>
-            <a href="/privacy" class="nav-link-premium">Privacy</a>
-            <a href="/terms" class="nav-link-premium">Terms</a>
-            <a href="/contact" class="nav-link-premium">Contact</a>
-          </div>
-          <p
-            class="text-xs font-medium tracking-wide"
-            style="color: var(--logo-secondary);"
-          >
-            &copy; {new Date().getFullYear()} RealSalaryCheck. All rights reserved.
-          </p>
-        </div>
+        Real<span style="color: var(--logo-secondary);">SalaryCheck</span>
+      </a>
+      <p
+        class="text-sm font-medium leading-relaxed"
+        style="color: var(--nav-text);"
+      >
+        Compare job offers globally. Discover your true international
+        purchasing power after local taxes and cost of living.
+      </p>
+    </div>
+    
+    <div class="flex flex-col items-center md:items-end gap-5">
+      <div
+        class="flex flex-wrap justify-center items-center gap-x-6 gap-y-3 text-sm font-semibold"
+      >
+        <a href="/about" class="nav-link-premium">About</a>
+        <a href="/privacy" class="nav-link-premium">Privacy</a>
+        <a href="/terms" class="nav-link-premium">Terms</a>
+        <a href="/contact" class="nav-link-premium">Contact</a>
       </div>
-    </footer>
+
+      <p 
+        class="text-[11px] font-medium tracking-wide opacity-50 transition-opacity hover:opacity-90 flex items-center gap-1 md:justify-end" 
+        style="color: var(--nav-text);"
+      >
+        Created with ❤️ by 
+        <a 
+          href="https://in.linkedin.com/in/snmeena" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="inline-flex items-center gap-1 underline decoration-zinc-700 underline-offset-2 hover:text-emerald-500 transition-colors font-semibold"
+          style="color: var(--text-primary);"
+        >
+          <svg class="w-3 h-3 fill-current inline" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+          Sonu Meena
+        </a> 
+        × Gemini × pure problem-solving.
+      </p>
+
+      <p
+        class="text-xs font-medium tracking-wide"
+        style="color: var(--logo-secondary);"
+      >
+        &copy; {new Date().getFullYear()} RealSalaryCheck. All rights reserved.
+      </p>
+    </div>
+  </div>
+</footer>
 
     <script>
       const html = document.documentElement;

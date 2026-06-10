@@ -2,43 +2,46 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout>
-  <main class="max-w-2xl mx-auto px-4 py-16 md:py-24">
-    <div class="mb-12">
+<Layout title="Privacy Policy | RealSalaryCheck">
+  <main class="max-w-2xl mx-auto px-4 py-16 md:py-24 text-left">
+    <div class="mb-12 text-center sm:text-left">
       <h1 class="text-4xl font-black tracking-tight mb-4" style="color: var(--logo-primary)">
         Privacy Policy
       </h1>
-      <p class="text-sm font-medium leading-relaxed" style="color: var(--nav-text)">
+      <p class="text-sm font-medium leading-relaxed" style="color: var(--text-secondary)">
         Last updated: June 2026
       </p>
     </div>
 
     <div class="rounded-2xl p-6 md:p-8 space-y-6 shadow-xl" style="background-color: var(--card-bg); border: 1px solid var(--card-border);">
       <section class="space-y-3">
-        <h2 class="text-lg font-bold" style="color: var(--logo-primary)">1. Data Collection</h2>
-        <p class="text-sm leading-relaxed" style="color: var(--nav-text)">
-          RealSalaryCheck operates as a privacy-first web utility. The financial inputs, income statistics, and country configurations entered into our comparison calculators are computed entirely locally inside your browser context. We do not transmit, collect, or store any proprietary financial credentials or specific income data on our infrastructure.
+        <h2 class="text-lg font-bold" style="color: var(--text-primary)">1. Client-Side Data Privacy</h2>
+        <p class="text-sm leading-relaxed" style="color: var(--text-secondary)">
+          RealSalaryCheck operates as a privacy-first web utility. All financial inputs, salary values, and comparison metrics entered into our calculators are processed entirely locally inside your browser context. We do not transmit, track, collect, or store any proprietary financial credentials or specific income data on our servers.
         </p>
       </section>
 
       <section class="space-y-3">
-        <h2 class="text-lg font-bold" style="color: var(--logo-primary)">2. Analytics and Analytics Signals</h2>
-        <p class="text-sm leading-relaxed" style="color: var(--nav-text)">
-          We utilize standard web analytics infrastructure to monitor generalized traffic patterns, regional usage distributions, and general system load parameters. This metadata involves non-personally identifiable variables such as device profiles, routing locations, and anonymized referral links used strictly to optimize site performance.
+        <h2 class="text-lg font-bold" style="color: var(--text-primary)">2. Google AdSense & Third-Party Advertising Cookies</h2>
+        <p class="text-sm leading-relaxed" style="color: var(--text-secondary)">
+          We use third-party advertising companies to serve ads when you visit our website. These companies, including our primary partner Google AdSense, may use cookies and web beacons to collect non-personally identifiable information (such as your IP address, ISP, or browser type) to serve ads based on your prior visits to this website or other sites on the internet.
+        </p>
+        <p class="text-sm leading-relaxed" style="color: var(--text-secondary)">
+          Google's use of advertising cookies (such as the DoubleClick cookie) enables it and its partners to serve highly relevant ads based on your specific context behavior. You may opt out of personalized interest-based advertising by visiting <a href="https://google.com/myadcenter" target="_blank" rel="noopener noreferrer" class="text-emerald-500 underline">Google Ad Settings</a> or <a href="https://aboutads.info" target="_blank" rel="noopener noreferrer" class="text-emerald-500 underline">AboutAds.info</a>.
         </p>
       </section>
 
       <section class="space-y-3">
-        <h2 class="text-lg font-bold" style="color: var(--logo-primary)">3. Third-Party Advertisements</h2>
-        <p class="text-sm leading-relaxed" style="color: var(--nav-text)">
-          This utility serves programmatic advertisements managed via third-party advertising partners like Google AdSense. Ad delivery networks may parse basic, non-identifiable browser cookies to match relevant promotional content to users based on generic contextual interests.
+        <h2 class="text-lg font-bold" style="color: var(--text-primary)">3. Log Files & Analytics Tracking</h2>
+        <p class="text-sm leading-relaxed" style="color: var(--text-secondary)">
+          Like standard web infrastructure, we log generic website analytics including device screen profiles, browser types, and standard referral entry paths. This operational metadata is parsed strictly in an aggregated, anonymized format to reduce latency bugs, monitor system loads, and optimize user interface layouts.
         </p>
       </section>
 
       <section class="space-y-3">
-        <h2 class="text-lg font-bold" style="color: var(--logo-primary)">4. Policy Amendments</h2>
-        <p class="text-sm leading-relaxed" style="color: var(--nav-text)">
-          We reserve the right to modify this privacy protocol at any time to preserve alignment with regulatory compliance baselines. Continued iteration with the site implicitly establishes full consent regarding our operational policies.
+        <h2 class="text-lg font-bold" style="color: var(--text-primary)">4. Contact Information</h2>
+        <p class="text-sm leading-relaxed" style="color: var(--text-secondary)">
+          If you have any questions regarding this privacy policy or data handling protocols, please reach out via our dedicated contact portal or email us directly at <span class="text-emerald-500 font-mono">support@realsalarycheck.com</span>.
         </p>
       </section>
     </div>

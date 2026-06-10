@@ -1,2 +1,18 @@
+# Cloudflare Pages Configuration Headers
+
+# 1. Protect default staging domains from duplicate content issues
 https://*.pages.dev/*
-  X-Robots-Tag: noindex, nofollow, nosnippet, noarchive
+  X-Robots-Tag: noindex, nofollow
+
+# 2. Allow full access and indexing on your live production domain
+https://realsalarycheck.com/*
+  X-Robots-Tag: index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+
+https://www.realsalarycheck.com/*
+  X-Robots-Tag: index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin

@@ -2,46 +2,49 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout>
+<Layout title="Contact Support | RealSalaryCheck">
   <main class="max-w-2xl mx-auto px-4 py-16 md:py-24">
     <div class="text-center mb-12">
       <h1 class="text-4xl font-black tracking-tight mb-4" style="color: var(--logo-primary)">
         Contact Support
       </h1>
-      <p class="text-sm font-medium max-w-sm mx-auto" style="color: var(--nav-text)">
-        Have feedback, found a logical error, or want to suggest new country data profiles? Reach out below.
+      <p class="text-sm font-medium max-w-sm mx-auto" style="color: var(--text-secondary)">
+        Have feedback, found a parity calculation error, or want to suggest new country profiles? Reach out below.
       </p>
     </div>
 
-    <!-- Premium Form Component matching main interface semantics -->
-    <div class="rounded-2xl p-6 md:p-8 shadow-xl" style="background-color: var(--card-bg); border: 1px solid var(--card-border);">
-      <form class="space-y-5">
+    <div class="rounded-2xl p-6 md:p-8 shadow-xl max-w-xl mx-auto" style="background-color: var(--card-bg); border: 1px solid var(--card-border);">
+      <form class="space-y-5" action="https://formspree.io/f/your_formspree_id" method="POST">
         <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider mb-2" style="color: var(--nav-text)">Full Name</label>
-          <input type="text" placeholder="e.g. John Doe" required
-            class="w-full rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none transition-all" 
+          <label class="block text-[10px] font-bold uppercase tracking-wider mb-2" style="color: var(--text-primary)">Full Name</label>
+          <input type="text" name="name" placeholder="e.g. John Doe" required
+            class="w-full rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/40 transition-all" 
             style="background-color: var(--input-bg); border: 1px solid var(--input-border); color: var(--input-text);" />
         </div>
 
         <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider mb-2" style="color: var(--nav-text)">Email Address</label>
-          <input type="email" placeholder="name@company.com" required
-            class="w-full rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none transition-all" 
+          <label class="block text-[10px] font-bold uppercase tracking-wider mb-2" style="color: var(--text-primary)">Email Address</label>
+          <input type="email" name="email" placeholder="name@company.com" required
+            class="w-full rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/40 transition-all" 
             style="background-color: var(--input-bg); border: 1px solid var(--input-border); color: var(--input-text);" />
         </div>
 
         <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider mb-2" style="color: var(--nav-text)">Message Description</label>
-          <textarea rows="4" placeholder="Detail your feedback or data queries here..." required
-            class="w-full rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none transition-all resize-none" 
+          <label class="block text-[10px] font-bold uppercase tracking-wider mb-2" style="color: var(--text-primary)">Message Description</label>
+          <textarea rows="4" name="message" placeholder="Detail your feedback or data queries here..." required
+            class="w-full rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/40 transition-all resize-none" 
             style="background-color: var(--input-bg); border: 1px solid var(--input-border); color: var(--input-text);"></textarea>
         </div>
 
         <button type="submit"
-          class="w-full bg-zinc-100 hover:bg-white text-zinc-950 font-bold py-3.5 rounded-xl text-sm tracking-wide transition-all duration-150 cursor-pointer active:scale-[0.99] shadow-md flex items-center justify-center light-mode:bg-zinc-900 light-mode:text-white light-mode:hover:bg-zinc-800">
+          class="w-full bg-zinc-100 hover:bg-white text-zinc-950 font-bold py-3.5 rounded-xl text-xs tracking-widest uppercase transition-all duration-150 cursor-pointer active:scale-[0.99] shadow-md flex items-center justify-center light-mode:bg-zinc-900 light-mode:text-white light-mode:hover:bg-zinc-800">
           Send Secure Message
         </button>
       </form>
+      
+      <div class="mt-6 text-center border-t border-zinc-800/30 pt-4 text-xs font-medium" style="color: var(--text-secondary);">
+        Or email us directly at: <span class="text-emerald-500 font-mono font-bold">support@realsalarycheck.com</span>
+      </div>
     </div>
   </main>
 </Layout>
