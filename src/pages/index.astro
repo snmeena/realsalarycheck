@@ -129,11 +129,11 @@ const faqs = [
               class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80"
               style="color: var(--nav-text)">Current Country</label
             >
-            <div class="relative w-full">
+            <div class="relative group w-full">
               <select
                 id="currentCountry"
-                aria-label="Select Current Country"
-                class="w-full appearance-none rounded-xl px-4 py-3 text-sm font-bold focus:outline-none transition-all cursor-pointer hover:bg-white/5 bg-[var(--input-bg)] border border-[var(--input-border)] text-[var(--input-text)]"
+                class="w-full appearance-none rounded-xl px-4 py-3 text-sm font-bold focus:outline-none transition-all cursor-pointer hover:bg-white/5"
+                style="background-color: var(--input-bg); border: 1px solid var(--input-border); color: var(--input-text);"
               >
                 {
                   countries
@@ -145,455 +145,569 @@ const faqs = [
                     ))
                 }
               </select>
-            </div>
-            <div class="space-y-2">
-              <label
-                class="text-[10px] font-bold uppercase tracking-wider opacity-70"
-                style="color: var(--nav-text);">Current Gross Salary / YR</label
-              >
-              <div class="relative">
-  <div class="absolute inset-y-0 left-0 w-14 flex items-center justify-center pointer-events-none">
-    <span id="currentSymbol" class="text-sm font-bold opacity-70" style="color: var(--text-secondary);">$</span>
-  </div>
-  <input 
-    type="number" 
-    id="currentSalary" 
-    aria-label="Current Annual Gross Salary"
-    placeholder="e.g. 100000" 
-    class="w-full rounded-xl pl-16 pr-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/40 bg-[var(--input-bg)] border border-[var(--input-border)] text-[var(--input-text)]" 
-  />
-</div>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class="p-3 md:p-4 rounded-xl border w-full text-left transition-colors duration-300 hover:border-zinc-500/40"
-          style="background-color: var(--inner-box); border-color: var(--card-border);"
-        >
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="w-full">
-              <label
-                class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80"
-                style="color: var(--nav-text)">Offer Country</label
-              >
-              <div class="relative w-full mt-4">
-                <select
-                  id="offerCountry"
-                  aria-label="Select Offer Country"
-                  class="w-full appearance-none rounded-xl px-4 py-3 text-sm font-bold focus:outline-none transition-all cursor-pointer hover:bg-white/5 bg-[var(--input-bg)] border border-[var(--input-border)] text-[var(--input-text)]"
-                >
-                  {
-                    countries
-                      .sort((a, b) => a.name.localeCompare(b.name))
-                      .map((c) => (
-                        <option value={c.code} selected={c.code === "US"}>
-                          {c.name} ({c.currency})
-                        </option>
-                      ))
-                  }
-                </select>
-              </div>
-              <div class="space-y-2">
-                <label
-                  class="text-[10px] font-bold uppercase tracking-wider opacity-70"
-                  style="color: var(--nav-text);"
-                  >Offered Gross Salary / YR</label
-                >
-                <div class="relative">
-  <div class="absolute inset-y-0 left-0 w-14 flex items-center justify-center pointer-events-none">
-    <span id="offerSymbol" class="text-sm font-bold opacity-70" style="color: var(--text-secondary);">$</span>
-  </div>
-  <input 
-    type="number" 
-    id="offerSalary" 
-    aria-label="Offered Annual Gross Salary"
-    placeholder="e.g. 80000" 
-    class="w-full rounded-xl pl-16 pr-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/40 bg-[var(--input-bg)] border border-[var(--input-border)] text-[var(--input-text)]" 
-  />
-</div>
-              </div>
-            </div>
-          </div>
-
-          <button
-            id="calcBtn"
-            tabindex="3"
-            class="w-full rounded-xl py-3.5 text-sm font-black tracking-widest uppercase transition-all duration-300 shadow-lg cursor-pointer flex justify-center items-center hover:opacity-90 active:scale-[0.98]"
-            style="background-color: var(--logo-primary); color: var(--bg-main);"
-          >
-            <span>COMPARE INTERNATIONAL SALARY NOW →</span>
-          </button>
-        </div>
-
-        <div
-          id="result"
-          class="hidden mt-10 space-y-4 scroll-mt-24 transition-all duration-500"
-        >
-          <div
-            id="verdictBanner"
-            class="rounded-2xl p-5 border text-center shadow-lg"
-            style="background-color: var(--card-bg); border-color: var(--card-border);"
-          >
-            <span
-              id="verdictBadge"
-              class="text-[11px] font-black uppercase tracking-widest px-5 py-2 rounded-full border"
-            ></span>
-          </div>
-
-          <div
-            class="rounded-2xl p-5 md:p-6 border shadow-lg"
-            style="background-color: var(--card-bg); border-color: var(--card-border);"
-          >
-            <h2
-              class="text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2"
-              style="color: var(--text-primary);"
-            >
-              <svg
-                class="w-4 h-4 text-emerald-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
-                ></path>
-              </svg>
-              Lifestyle Value (PPP Adjusted)
-            </h2>
-
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
               <div
-                class="rounded-xl p-4 border text-center"
-                style="background-color: var(--inner-box); border-color: var(--card-border);"
+                class="pointer-events-none absolute inset-y-0 right-4 flex items-center transition-transform group-hover:translate-y-0.5"
+                style="color: var(--nav-text)"
               >
-                <p
-                  class="text-[10px] font-bold uppercase tracking-wider mb-1 opacity-70"
-                  style="color: var(--nav-text);"
-                >
-                  Current Life Value
-                </p>
-                <p
-                  id="pppCurrent"
-                  class="text-xl md:text-2xl font-black"
-                  style="color: var(--logo-primary);"
-                >
-                </p>
-              </div>
-              <div
-                class="rounded-xl p-4 border text-center"
-                style="background-color: var(--inner-box); border-color: var(--card-border);"
-              >
-                <p
-                  class="text-[10px] font-bold uppercase tracking-wider mb-1 opacity-70"
-                  style="color: var(--nav-text);"
-                >
-                  Offered Life Value
-                </p>
-                <p
-                  id="pppOffer"
-                  class="text-xl md:text-2xl font-black"
-                  style="color: var(--logo-primary);"
-                >
-                </p>
-              </div>
-              <div
-                class="col-span-2 md:col-span-1 rounded-xl p-4 border text-center relative overflow-hidden"
-                style="background-color: var(--inner-box); border-color: var(--card-border);"
-              >
-                <p
-                  class="text-[10px] font-bold uppercase tracking-wider mb-1 opacity-70"
-                  style="color: var(--nav-text);"
-                >
-                  Purchasing Power Shift
-                </p>
-                <p id="pppChange" class="text-2xl font-black"></p>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="rounded-2xl p-5 md:p-6 border bg-amber-500/5"
-            style="border-color: rgba(245, 158, 11, 0.2);"
-          >
-            <h3
-              class="text-sm font-bold mb-3 text-amber-500 flex items-center gap-2"
-            >
-              <svg
-                class="w-5 h-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                ></path>
-              </svg>
-              Reality Check: What does this mean?
-            </h3>
-            <p
-              id="dynamicExplanation"
-              class="text-sm leading-relaxed mb-4"
-              style="color: var(--text-secondary);"
-            >
-            </p>
-
-            <div class="border-t border-amber-500/10 pt-4 mt-4">
-              <p
-                class="text-xs font-bold uppercase tracking-wider mb-2 text-amber-500/80"
-              >
-                ⚠️ Crucial Manual Considerations:
-              </p>
-              <ul class="text-xs space-y-2" style="color: var(--nav-text);">
-                <li class="flex items-start gap-2">
-                  <span class="text-amber-500">•</span>
-                  <b>Income Taxes:</b> This calculation is based on GROSS income.
-                  You must calculate the income tax of your destination country manually,
-                  as it varies by marital status and state.
-                </li>
-                <li class="flex items-start gap-2">
-                  <span class="text-amber-500">•</span>
-                  <b>City Tier Premiums:</b> PPP is a national average. If moving
-                  to an expensive tech hub (e.g., London, NYC, San Francisco), housing
-                  costs will heavily skew this number downwards.
-                </li>
-                <li class="flex items-start gap-2">
-                  <span class="text-amber-500">•</span>
-                  <b>Healthcare & Education:</b> Factor in private insurance costs
-                  or schooling fees if they are not publicly subsidized in your target
-                  country.
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <button
-            id="showCalcBtn"
-            class="w-full rounded-xl py-3 text-sm font-bold border transition-all duration-200 cursor-pointer hover:bg-white/5"
-            style="border-color: var(--card-border); color: var(--nav-text);"
-          >
-            Show Calculation Breakdown ↓
-          </button>
-
-          <div
-            id="calcBreakdown"
-            class="hidden rounded-2xl p-5 md:p-6 border space-y-4 shadow-lg"
-            style="background-color: var(--card-bg); border-color: var(--card-border);"
-          >
-            <div class="flex justify-between items-center mb-2">
-              <p class="text-sm font-bold" style="color: var(--text-primary);">
-                Mathematical Breakdown:
-              </p>
-              <button
-                id="copyBreakdownBtn"
-                class="text-xs font-bold tracking-wider uppercase border rounded-lg px-3 py-1.5 transition-all duration-200 active:scale-95 cursor-pointer flex items-center gap-1.5 hover:bg-white/5"
-                style="border-color: var(--card-border); background-color: var(--inner-box); color: var(--nav-text);"
-              >
-                <svg
-                  class="w-3.5 h-3.5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                >
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                   <path
+                    d="M2 4L6 8L10 4"
+                    stroke="currentColor"
+                    stroke-width="2.5"
                     stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
-                  ></path>
+                    stroke-linejoin="round"></path>
                 </svg>
-                <span id="copyBtnText">Copy</span>
-              </button>
+              </div>
             </div>
-            <div
-              id="breakdownContent"
-              class="space-y-3 text-xs md:text-sm font-mono leading-relaxed p-4 rounded-xl border"
-              style="background-color: var(--inner-box); border-color: var(--card-border); color: var(--nav-text);"
+          </div>
+          <div class="space-y-2">
+            <label
+              class="text-[10px] font-bold uppercase tracking-wider opacity-70"
+              style="color: var(--nav-text);">Current Gross Salary / YR</label
             >
+            <div class="relative">
+              <div
+                class="absolute inset-y-0 left-0 w-14 flex items-center justify-center pointer-events-none"
+              >
+                <span
+                  id="currentSymbol"
+                  class="text-sm font-bold opacity-70"
+                  style="color: var(--text-secondary);">$</span
+                >
+              </div>
+              <input
+                type="number"
+                id="currentSalary"
+                placeholder="e.g. 100000"
+                class="w-full rounded-xl pl-11 pr-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+                style="background-color: var(--input-bg); border: 1px solid var(--input-border); color: var(--input-text);"
+              />
             </div>
           </div>
         </div>
       </div>
 
       <div
-        id="instantConverterWrapper"
-        class="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-40 font-sans text-left print:hidden"
+        class="p-3 md:p-4 rounded-xl border w-full text-left transition-colors duration-300 hover:border-zinc-500/40"
+        style="background-color: var(--inner-box); border-color: var(--card-border);"
       >
-        <div
-          id="converterTimedPop"
-          class="absolute bottom-16 right-2 text-[10px] font-black tracking-widest uppercase px-4 py-2 rounded-xl shadow-2xl backdrop-blur-md transition-all duration-500 ease-out translate-y-2 opacity-0 pointer-events-none border select-none"
-          style="background-color: var(--card-bg); border-color: var(--card-border); color: var(--logo-primary);"
-        >
-          Currency Converter
-        </div>
-
-        <button
-          id="converterTriggerBtn"
-          class="w-12 h-12 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 active:scale-95 hover:scale-105 cursor-pointer border"
-          style="background-color: var(--card-bg); border-color: var(--card-border); color: var(--logo-primary); display: flex;"
-        >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2.5"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
-          </svg>
-        </button>
-
-        <div
-          id="converterExpandedPanel"
-          class="hidden w-72 sm:w-80 md:w-96 rounded-2xl shadow-2xl border p-3.5 backdrop-blur-xl transition-all duration-300 transform scale-95 opacity-0 origin-bottom-right"
-          style="background-color: var(--card-bg); border-color: var(--card-border);"
-        >
-          <div
-            class="flex items-center justify-between mb-2.5 border-b pb-1.5"
-            style="border-color: var(--card-border);"
-          >
-            <h3
-              class="text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5"
-              style="color: var(--text-primary);"
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="w-full">
+            <label
+              class="block text-[10px] font-bold uppercase tracking-wider mb-1.5 opacity-80"
+              style="color: var(--nav-text)">Offer Country</label
             >
-              <span
-                class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"
-              ></span> Live Forex
-            </h3>
-            <button
-              id="closeConverterBtn"
-              class="text-xs font-bold opacity-40 hover:opacity-100 transition-all cursor-pointer p-1"
-              style="color: var(--nav-text);">✕</button
-            >
-          </div>
-
-          <div class="space-y-2.5">
-            <div
-              class="p-2 rounded-xl border flex items-center justify-between gap-1.5 transition-colors focus-within:border-emerald-500/50"
-              style="background-color: var(--inner-box); border-color: var(--card-border);"
-            >
+            <div class="relative group w-full">
               <select
-                id="instantSrcCountry"
-                aria-label="Dynamic Forex Source Profile Dropdown"
-                class="bg-transparent border-0 font-bold text-xs focus:outline-none focus:ring-0 cursor-pointer w-24 text-ellipsis overflow-hidden"
-                style="color: var(--text-primary);"
+                id="offerCountry"
+                class="w-full appearance-none rounded-xl px-4 py-3 text-sm font-bold focus:outline-none transition-all cursor-pointer hover:bg-white/5"
+                style="background-color: var(--input-bg); border: 1px solid var(--input-border); color: var(--input-text);"
               >
                 {
-                  countries.map((c) => (
-                    <option
-                      value={c.code}
-                      style="background-color: var(--input-bg); color: var(--input-text);"
-                    >
-                      {c.currency} ({c.symbol})
-                    </option>
-                  ))
+                  countries
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map((c) => (
+                      <option value={c.code} selected={c.code === "US"}>
+                        {c.name} ({c.currency})
+                      </option>
+                    ))
                 }
               </select>
-              <input
-                type="number"
-                id="instantSrcAmount"
-                placeholder="0.00"
-                class="bg-transparent border-0 text-right font-black text-sm focus:outline-none focus:ring-0 w-full p-0"
-                style="color: var(--logo-primary);"
-              />
-            </div>
-
-            <div class="flex justify-center -my-2 relative z-10 select-none">
               <div
-                class="text-[10px] p-0.5 rounded-full border shadow-sm font-black bg-zinc-800"
-                style="background-color: var(--card-bg); border-color: var(--card-border); color: var(--nav-text);"
+                class="pointer-events-none absolute inset-y-0 right-4 flex items-center transition-transform group-hover:translate-y-0.5"
+                style="color: var(--nav-text)"
               >
-                ⇅
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path
+                    d="M2 4L6 8L10 4"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+                </svg>
               </div>
             </div>
-
-            <div
-              class="p-2 rounded-xl border flex items-center justify-between gap-1.5 transition-colors focus-within:border-emerald-500/50"
-              style="background-color: var(--inner-box); border-color: var(--card-border);"
+          </div>
+          <div class="space-y-2">
+            <label
+              class="text-[10px] font-bold uppercase tracking-wider opacity-70"
+              style="color: var(--nav-text);">Offered Gross Salary / YR</label
             >
-              <select
-                id="instantTargetCountry"
-                aria-label="Dynamic Forex Target Profile Dropdown"
-                class="bg-transparent border-0 font-bold text-xs focus:outline-none focus:ring-0 cursor-pointer w-24 text-ellipsis overflow-hidden"
-                style="color: var(--text-primary);"
+            <div class="relative">
+              <div
+                class="absolute inset-y-0 left-0 w-14 flex items-center justify-center pointer-events-none"
               >
-                {
-                  countries.map((c) => (
-                    <option
-                      value={c.code}
-                      selected={c.code === "US"}
-                      style="background-color: var(--input-bg); color: var(--input-text);"
-                    >
-                      {c.currency} ({c.symbol})
-                    </option>
-                  ))
-                }
-              </select>
+                <span
+                  id="offerSymbol"
+                  class="text-sm font-bold opacity-70"
+                  style="color: var(--text-secondary);">$</span
+                >
+              </div>
               <input
                 type="number"
-                id="instantTargetAmount"
-                placeholder="0.00"
-                class="bg-transparent border-0 text-right font-black text-sm focus:outline-none focus:ring-0 w-full p-0"
-                style="color: var(--logo-primary);"
+                id="offerSalary"
+                placeholder="e.g. 80000"
+                class="w-full rounded-xl pl-11 pr-4 py-3 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+                style="background-color: var(--input-bg); border: 1px solid var(--input-border); color: var(--input-text);"
               />
             </div>
           </div>
         </div>
       </div>
 
-      <section
-        class="mt-20 pt-16 border-t"
-        style="border-color: var(--footer-border);"
+      <button
+        id="calcBtn"
+        tabindex="3"
+        class="w-full rounded-xl py-3.5 text-sm font-black tracking-widest uppercase transition-all duration-300 shadow-lg cursor-pointer flex justify-center items-center hover:opacity-90 active:scale-[0.98]"
+        style="background-color: var(--logo-primary); color: var(--bg-main);"
       >
-        <div class="prose prose-invert max-w-none space-y-12">
-          <div class="text-center max-w-3xl mx-auto mb-12 px-2 hidden md:block">
-            <h2
-              class="text-2xl md:text-4xl font-black tracking-tight mb-5"
-              style="color: var(--text-primary);"
-            >
-              Global Cost of Living Comparison Engine
-            </h2>
+        <span>COMPARE INTERNATIONAL SALARY NOW →</span>
+      </button>
+    </div>
+
+    <div
+      id="result"
+      class="hidden mt-10 space-y-4 scroll-mt-24 transition-all duration-500"
+    >
+      <div
+        id="verdictBanner"
+        class="rounded-2xl p-5 border text-center shadow-lg"
+        style="background-color: var(--card-bg); border-color: var(--card-border);"
+      >
+        <span
+          id="verdictBadge"
+          class="text-[11px] font-black uppercase tracking-widest px-5 py-2 rounded-full border"
+        ></span>
+      </div>
+
+      <div
+        class="rounded-2xl p-5 md:p-6 border shadow-lg"
+        style="background-color: var(--card-bg); border-color: var(--card-border);"
+      >
+        <h2
+          class="text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2"
+          style="color: var(--text-primary);"
+        >
+          <svg
+            class="w-4 h-4 text-emerald-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
+            ></path>
+          </svg>
+          Lifestyle Value (PPP Adjusted)
+        </h2>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <div
+            class="rounded-xl p-4 border text-center"
+            style="background-color: var(--inner-box); border-color: var(--card-border);"
+          >
             <p
-              class="font-medium leading-relaxed text-sm md:text-base"
-              style="color: var(--text-secondary);"
+              class="text-[10px] font-bold uppercase tracking-wider mb-1 opacity-70"
+              style="color: var(--nav-text);"
             >
-              Standard currency converters only show spot market forex exchange
-              rates. RealSalaryCheck processes the latest World Bank
-              macroeconomic indicator data to deliver a realistic <strong
-                >purchasing power parity comparison</strong
-              > tailored for global tech relocation.
+              Current Life Value
             </p>
+            <p
+              id="pppCurrent"
+              class="text-xl md:text-2xl font-black"
+              style="color: var(--logo-primary);"
+            >
+            </p>
+          </div>
+          <div
+            class="rounded-xl p-4 border text-center"
+            style="background-color: var(--inner-box); border-color: var(--card-border);"
+          >
+            <p
+              class="text-[10px] font-bold uppercase tracking-wider mb-1 opacity-70"
+              style="color: var(--nav-text);"
+            >
+              Offered Life Value
+            </p>
+            <p
+              id="pppOffer"
+              class="text-xl md:text-2xl font-black"
+              style="color: var(--logo-primary);"
+            >
+            </p>
+          </div>
+          <div
+            class="col-span-2 md:col-span-1 rounded-xl p-4 border text-center relative overflow-hidden"
+            style="background-color: var(--inner-box); border-color: var(--card-border);"
+          >
+            <p
+              class="text-[10px] font-bold uppercase tracking-wider mb-1 opacity-70"
+              style="color: var(--nav-text);"
+            >
+              Purchasing Power Shift
+            </p>
+            <p id="pppChange" class="text-2xl font-black"></p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="rounded-2xl p-5 md:p-6 border bg-amber-500/5"
+        style="border-color: rgba(245, 158, 11, 0.2);"
+      >
+        <h3
+          class="text-sm font-bold mb-3 text-amber-500 flex items-center gap-2"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          Reality Check: What does this mean?
+        </h3>
+        <p
+          id="dynamicExplanation"
+          class="text-sm leading-relaxed mb-4"
+          style="color: var(--text-secondary);"
+        >
+        </p>
+
+        <div class="border-t border-amber-500/10 pt-4 mt-4">
+          <p
+            class="text-xs font-bold uppercase tracking-wider mb-2 text-amber-500/80"
+          >
+            ⚠️ Crucial Manual Considerations:
+          </p>
+          <ul class="text-xs space-y-2" style="color: var(--nav-text);">
+            <li class="flex items-start gap-2">
+              <span class="text-amber-500">•</span>
+              <b>Income Taxes:</b> This calculation is based on GROSS income. You
+              must calculate the income tax of your destination country manually,
+              as it varies by marital status and state.
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-amber-500">•</span>
+              <b>City Tier Premiums:</b> PPP is a national average. If moving to an
+              expensive tech hub (e.g., London, NYC, San Francisco), housing costs
+              will heavily skew this number downwards.
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-amber-500">•</span>
+              <b>Healthcare & Education:</b> Factor in private insurance costs or
+              schooling fees if they are not publicly subsidized in your target country.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <button
+        id="showCalcBtn"
+        class="w-full rounded-xl py-3 text-sm font-bold border transition-all duration-200 cursor-pointer hover:bg-white/5"
+        style="border-color: var(--card-border); color: var(--nav-text);"
+      >
+        Show Calculation Breakdown ↓
+      </button>
+
+      <div
+        id="calcBreakdown"
+        class="hidden rounded-2xl p-5 md:p-6 border space-y-4 shadow-lg"
+        style="background-color: var(--card-bg); border-color: var(--card-border);"
+      >
+        <div class="flex justify-between items-center mb-2">
+          <p class="text-sm font-bold" style="color: var(--text-primary);">
+            Mathematical Breakdown:
+          </p>
+          <button
+            id="copyBreakdownBtn"
+            class="text-xs font-bold tracking-wider uppercase border rounded-lg px-3 py-1.5 transition-all duration-200 active:scale-95 cursor-pointer flex items-center gap-1.5 hover:bg-white/5"
+            style="border-color: var(--card-border); background-color: var(--inner-box); color: var(--nav-text);"
+          >
+            <svg
+              class="w-3.5 h-3.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
+              ></path>
+            </svg>
+            <span id="copyBtnText">Copy</span>
+          </button>
+        </div>
+        <div
+          id="breakdownContent"
+          class="space-y-3 text-xs md:text-sm font-mono leading-relaxed p-4 rounded-xl border"
+          style="background-color: var(--inner-box); border-color: var(--card-border); color: var(--nav-text);"
+        >
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div
+    id="instantConverterWrapper"
+    class="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-40 font-sans text-left print:hidden"
+  >
+    <div
+      id="converterTimedPop"
+      class="absolute bottom-16 right-2 text-[10px] font-black tracking-widest uppercase px-4 py-2 rounded-xl shadow-2xl backdrop-blur-md transition-all duration-500 ease-out translate-y-2 opacity-0 pointer-events-none border select-none"
+      style="background-color: var(--card-bg); border-color: var(--card-border); color: var(--logo-primary);"
+    >
+      Currency Converter
+    </div>
+
+    <button
+      id="converterTriggerBtn"
+      class="w-12 h-12 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 active:scale-95 hover:scale-105 cursor-pointer border"
+      style="background-color: var(--card-bg); border-color: var(--card-border); color: var(--logo-primary); display: flex;"
+    >
+      <svg
+        class="w-5 h-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2.5"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+      </svg>
+    </button>
+
+    <div
+      id="converterExpandedPanel"
+      class="hidden w-72 sm:w-80 md:w-96 rounded-2xl shadow-2xl border p-3.5 backdrop-blur-xl transition-all duration-300 transform scale-95 opacity-0 origin-bottom-right"
+      style="background-color: var(--card-bg); border-color: var(--card-border);"
+    >
+      <div
+        class="flex items-center justify-between mb-2.5 border-b pb-1.5"
+        style="border-color: var(--card-border);"
+      >
+        <h3
+          class="text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5"
+          style="color: var(--text-primary);"
+        >
+          <span
+            class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"
+          ></span> Live Forex
+        </h3>
+        <button
+          id="closeConverterBtn"
+          class="text-xs font-bold opacity-40 hover:opacity-100 transition-all cursor-pointer p-1"
+          style="color: var(--nav-text);">✕</button
+        >
+      </div>
+
+      <div class="space-y-2.5">
+        <div
+          class="p-2 rounded-xl border flex items-center justify-between gap-1.5 transition-colors focus-within:border-emerald-500/50"
+          style="background-color: var(--inner-box); border-color: var(--card-border);"
+        >
+          <select
+            id="instantSrcCountry"
+            aria-label="Dynamic Forex Source Profile Dropdown"
+            class="bg-transparent border-0 font-bold text-xs focus:outline-none focus:ring-0 cursor-pointer w-24 text-ellipsis overflow-hidden"
+            style="color: var(--text-primary);"
+          >
+            {
+              countries.map((c) => (
+                <option
+                  value={c.code}
+                  style="background-color: var(--input-bg); color: var(--input-text);"
+                >
+                  {c.currency} ({c.symbol})
+                </option>
+              ))
+            }
+          </select>
+          <input
+            type="number"
+            id="instantSrcAmount"
+            placeholder="0.00"
+            class="bg-transparent border-0 text-right font-black text-sm focus:outline-none focus:ring-0 w-full p-0"
+            style="color: var(--logo-primary);"
+          />
+        </div>
+
+        <div class="flex justify-center -my-2 relative z-10 select-none">
+          <div
+            class="text-[10px] p-0.5 rounded-full border shadow-sm font-black bg-zinc-800"
+            style="background-color: var(--card-bg); border-color: var(--card-border); color: var(--nav-text);"
+          >
+            ⇅
           </div>
         </div>
 
-        <div class="max-w-3xl mx-auto px-2 mt-12">
-          <h2
-            class="text-2xl md:text-3xl font-black text-center mb-8"
+        <div
+          class="p-2 rounded-xl border flex items-center justify-between gap-1.5 transition-colors focus-within:border-emerald-500/50"
+          style="background-color: var(--inner-box); border-color: var(--card-border);"
+        >
+          <select
+            id="instantTargetCountry"
+            aria-label="Dynamic Forex Target Profile Dropdown"
+            class="bg-transparent border-0 font-bold text-xs focus:outline-none focus:ring-0 cursor-pointer w-24 text-ellipsis overflow-hidden"
             style="color: var(--text-primary);"
           >
-            Frequently Asked Questions
-          </h2>
-          <div class="space-y-4" id="faqContainer">
             {
-              faqs.map((faq) => (
-                <div
-                  class="faq-item border rounded-xl overflow-hidden transition-colors"
-                  style="border-color: var(--card-border);"
+              countries.map((c) => (
+                <option
+                  value={c.code}
+                  selected={c.code === "US"}
+                  style="background-color: var(--input-bg); color: var(--input-text);"
                 >
-                  <button class="faq-btn w-full text-left px-5 md:px-6 py-4 md:py-5 font-bold text-sm flex justify-between items-center cursor-pointer hover:bg-white/5 transition-colors">
-                    <span>{faq.q}</span>
+                  {c.currency} ({c.symbol})
+                </option>
+              ))
+            }
+          </select>
+          <input
+            type="number"
+            id="instantTargetAmount"
+            placeholder="0.00"
+            class="bg-transparent border-0 text-right font-black text-sm focus:outline-none focus:ring-0 w-full p-0"
+            style="color: var(--logo-primary);"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section
+    class="mt-20 pt-16 border-t"
+    style="border-color: var(--footer-border);"
+  >
+    <div class="prose prose-invert max-w-none space-y-12">
+      <div class="text-center max-w-3xl mx-auto mb-12 px-2 hidden md:block">
+        <h2
+          class="text-2xl md:text-4xl font-black tracking-tight mb-5"
+          style="color: var(--text-primary);"
+        >
+          Global Cost of Living Comparison Engine
+        </h2>
+        <p
+          class="font-medium leading-relaxed text-sm md:text-base"
+          style="color: var(--text-secondary);"
+        >
+          Standard currency converters only show spot market forex exchange
+          rates. RealSalaryCheck processes the latest World Bank macroeconomic
+          indicator data to deliver a realistic <strong
+            >purchasing power parity comparison</strong
+          > tailored for global tech relocation.
+        </p>
+      </div>
+    </div>
+
+    <div class="max-w-3xl mx-auto px-2 mt-12">
+      <h2
+        class="text-2xl md:text-3xl font-black text-center mb-8"
+        style="color: var(--text-primary);"
+      >
+        Frequently Asked Questions
+      </h2>
+      <div class="space-y-4" id="faqContainer">
+        {
+          faqs.map((faq) => (
+            <div
+              class="faq-item border rounded-xl overflow-hidden transition-colors"
+              style="border-color: var(--card-border);"
+            >
+              <button class="faq-btn w-full text-left px-5 md:px-6 py-4 md:py-5 font-bold text-sm flex justify-between items-center cursor-pointer hover:bg-white/5 transition-colors">
+                <span>{faq.q}</span>
+                <svg
+                  class="faq-icon w-5 h-5 flex-shrink-0 transform transition-transform duration-300"
+                  style="color: var(--nav-text);"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+              <div
+                class="faq-answer hidden px-5 md:px-6 pb-5 text-sm leading-relaxed border-t pt-4"
+                style="border-color: var(--card-border);"
+              >
+                {faq.a}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+  <section
+    class="max-w-3xl mx-auto px-4 mt-20 pt-12 border-t"
+    style="border-color: var(--footer-border);"
+  >
+    <div class="text-center mb-8">
+      <h2
+        class="text-xl md:text-2xl font-black tracking-tight mb-2"
+        style="color: var(--text-primary);"
+      >
+        Explore Global Salary Parity
+      </h2>
+      <p
+        class="text-xs font-medium opacity-75"
+        style="color: var(--text-secondary);"
+      >
+        Quickly compare purchasing power parity (PPP) and cost of living
+        conversion paths.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {
+        countries.slice(0, 6).map((fromCountry) =>
+          countries.slice(0, 4).map((toCountry) => {
+            if (fromCountry.code !== toCountry.code) {
+              return (
+                <a
+                  href={`/compare/${fromCountry.code.toLowerCase()}-to-${toCountry.code.toLowerCase()}`}
+                  class="group relative p-3.5 rounded-xl border transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] flex items-center justify-between overflow-hidden"
+                  style="background-color: var(--card-bg); border-color: var(--card-border);"
+                >
+                  <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-emerald-500/[0.03]" />
+
+                  <div class="flex flex-col gap-0.5 relative z-10 text-left">
+                    <span class="text-[9px] font-black uppercase tracking-widest text-emerald-500">
+                      Parity Pathway
+                    </span>
+                    <span
+                      class="text-xs font-bold transition-colors"
+                      style="color: var(--text-primary);"
+                    >
+                      {fromCountry.name} <span class="opacity-40mx-1">→</span>{" "}
+                      {toCountry.name}
+                    </span>
+                  </div>
+
+                  <div
+                    class="w-7 h-7 rounded-full border flex items-center justify-center transition-all duration-300 group-hover:border-emerald-500/40 group-hover:bg-emerald-500/10"
+                    style="border-color: var(--card-border);"
+                  >
                     <svg
-                      class="faq-icon w-5 h-5 flex-shrink-0 transform transition-transform duration-300"
-                      style="color: var(--nav-text);"
+                      class="w-3 h-3 transition-colors text-zinc-500 group-hover:text-emerald-500"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -601,97 +715,19 @@ const faqs = [
                       <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 9l-7 7-7-7"
+                        stroke-width="2.5"
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"
                       />
                     </svg>
-                  </button>
-                  <div
-                    class="faq-answer hidden px-5 md:px-6 pb-5 text-sm leading-relaxed border-t pt-4"
-                    style="border-color: var(--card-border);"
-                  >
-                    {faq.a}
                   </div>
-                </div>
-              ))
+                </a>
+              );
             }
-          </div>
-        </div>
-      </section>
-      <section
-        class="max-w-3xl mx-auto px-4 mt-20 pt-12 border-t"
-        style="border-color: var(--footer-border);"
-      >
-        <div class="text-center mb-8">
-          <h2
-            class="text-xl md:text-2xl font-black tracking-tight mb-2"
-            style="color: var(--text-primary);"
-          >
-            Explore Global Salary Parity
-          </h2>
-          <p
-            class="text-xs font-medium opacity-75"
-            style="color: var(--text-secondary);"
-          >
-            Quickly compare purchasing power parity (PPP) and cost of living
-            conversion paths.
-          </p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {
-            countries.slice(0, 6).map((fromCountry) =>
-              countries.slice(0, 4).map((toCountry) => {
-                if (fromCountry.code !== toCountry.code) {
-                  return (
-                    <a
-                      href={`/compare/${fromCountry.code.toLowerCase()}-to-${toCountry.code.toLowerCase()}`}
-                      class="group relative p-3.5 rounded-xl border transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] flex items-center justify-between overflow-hidden"
-                      style="background-color: var(--card-bg); border-color: var(--card-border);"
-                    >
-                      <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-emerald-500/[0.03]" />
-
-                      <div class="flex flex-col gap-0.5 relative z-10 text-left">
-                        <span class="text-[9px] font-black uppercase tracking-widest text-emerald-500">
-                          Parity Pathway
-                        </span>
-                        <span
-                          class="text-xs font-bold transition-colors"
-                          style="color: var(--text-primary);"
-                        >
-                          {fromCountry.name}{" "}
-                          <span class="opacity-40mx-1">→</span> {toCountry.name}
-                        </span>
-                      </div>
-
-                      <div
-                        class="w-7 h-7 rounded-full border flex items-center justify-center transition-all duration-300 group-hover:border-emerald-500/40 group-hover:bg-emerald-500/10"
-                        style="border-color: var(--card-border);"
-                      >
-                        <svg
-                          class="w-3 h-3 transition-colors text-zinc-500 group-hover:text-emerald-500"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2.5"
-                            d="M14 5l7 7m0 0l-7 7m7-7H3"
-                          />
-                        </svg>
-                      </div>
-                    </a>
-                  );
-                }
-              }),
-            )
-          }
-        </div>
-      </section>
+          }),
+        )
+      }
     </div>
+  </section>
+</Layout>
 
-    <script src="../scripts/calculator.ts"></script>
-  </main></Layout
->
+<script src="../scripts/calculator.ts"></script>

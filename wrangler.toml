@@ -1,0 +1,7 @@
+name = "realsalarycheck"
+compatibility_date = "2026-06-11"
+
+# Is block se cloudflare system ko samjhayenge ki koi server runtime entrypoint nahi chahiye
+[site]
+bucket = "./dist"
+entry-point = "workers-site"
